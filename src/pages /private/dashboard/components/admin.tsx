@@ -4,6 +4,7 @@ import { SalesChart } from "./chart";
 import WeatherWidget from "./weatherWidget";
 import { TableDashboard } from "./table";
 import { useGetMe } from "@/quereis/useAuth";
+import { useUserStore } from "@/stores/useUserStore";
 
 
 export const metadata = {
@@ -14,6 +15,9 @@ export const metadata = {
 export function DashboardAdmin() {
 
   const { data: response } = useGetMe();
+  const { user } = useUserStore();
+  const accessLevel = user?.role ?? "";  
+     
   const data = response as any;
   const userName = data?.client?.name || "Usuário";
 

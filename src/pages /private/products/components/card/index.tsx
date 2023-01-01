@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { CartCounter } from '@/pages /private/orders/components/crud/cartCounter'
+import { useUserStore } from '@/stores/useUserStore'
 
 interface Product {
   id: string
@@ -40,6 +41,8 @@ const stockConfig: Record<Product['stock'], { color: string; badge: string; prog
 }
 
 function ProductCard({ product }: { product: Product }) {
+  const { user } = useUserStore((state) => state); 
+  const isAdmin = user?.role === "Admin"
   const config = stockConfig[product.stock]
 
   return (
@@ -57,23 +60,25 @@ function ProductCard({ product }: { product: Product }) {
         </div>
         {/* Menu */}
         <div className="absolute top-2 right-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="size-8 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white"
-              >
-                <MoreHorizontal size={16} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-              <DropdownMenuItem>Editar</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">Remover</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {isAdmin && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-8 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white"
+                >
+                  <MoreHorizontal size={16} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
+                <DropdownMenuItem>Editar</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem variant="destructive">Remover</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
 
@@ -88,7 +93,6 @@ function ProductCard({ product }: { product: Product }) {
               price: product.price,
             }} />
         </div>
-      
 
         {/* Quantidade e Preço */}
         <div className="flex items-end justify-between">

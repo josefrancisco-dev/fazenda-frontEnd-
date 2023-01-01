@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, BarChart3, Package, ShoppingCart, Truck, Boxes, Users, User, Leaf } from 'lucide-react';
 import type { Role } from '@/types/typesApi';
-import { useGetMe } from '@/quereis/useAuth';
+import { useUserStore } from '@/stores/useUserStore';
 
 type NavItem = {
   path: string;
@@ -21,36 +21,20 @@ const navItems: NavItem[] = [
   { path: '/stock',     label: 'Estoque',      icon: Boxes,       allowed: ['Admin'] },
 ];
 
-const getUserRole = (response: any): Role | null => {
-  if (!response) return null;
-  
-  // Verifica se response tem a propriedade client (estrutura comum)
-  if ('client' in response && response.client?.role) {
-    return response.client.role;
-  }
-  
-  // Verifica se response é diretamente o Client
-  if ('role' in response && response.role) {
-    return response.role;
-  }
-  
-  return null;
-};
-
 export default function Sidebar() {
-  const { data: response} = useGetMe();
+ const { user } = useUserStore();
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const userRole = user?.role ?? null;
 
-  console.log('Current location:', location.pathname);
+  const filteredNavItems = navItems.filter(item => {
+    if (!item.allowed) return true;
+    return userRole && item.allowed.includes(userRole);
+  });
 
-  const userRole = getUserRole(response);
-
-  const filteredNavItems = navItems.filter(item =>
-    !item.allowed || (userRole && item.allowed.includes(userRole))
-  );
-
-  console.log('Filtered nav items:', filteredNavItems.map(i => i.path));
+  if (!user) {
+    return null;
+  }
 
   return (
     <>
