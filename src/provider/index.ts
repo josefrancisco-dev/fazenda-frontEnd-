@@ -1,15 +1,31 @@
 import { createBrowserRouter } from "react-router-dom";
-import { AppLayout } from "../_layuout /idenx";
-import { Dashboard } from "../pages /dashboard";
-import { NotFound } from "../pages /notFound";
+import Home from "@/pages /webSite";
+import LoginPage from "@/pages /login";
+import { AppLayout } from "@/_layuout /idenx";
+import { Dashboard } from "@/pages /manegment/dashboard";
+import { Clients } from "@/pages /manegment/clients";
+import { Supplier } from "@/pages /manegment/supplier";
+import { Products } from "@/pages /manegment/products";
+import { Orders } from "@/pages /manegment/orders";
+import { Stock } from "@/pages /manegment/stock";
+import { Shopping } from "@/pages /manegment/shopping";
+import { NotFound } from "@/pages /notFound";
+import Auth from "@/auth";
+import Acount from "@/pages /acount";
 
 export const router = createBrowserRouter([
-//   {
-//     path: "/login",
-//     Component:SingIn,
-//     children: [],
-//   },
-
+  { path: '/home',   
+     Component: Home   
+   },
+   
+  {
+    path: "/",
+    Component: Auth,
+     children: [
+      {   index: true, path: "/", Component: LoginPage,},
+      {   path: "/acount", Component: Acount,}
+     ],
+   },
   {
     path: "/",
     Component:AppLayout,
@@ -19,20 +35,16 @@ export const router = createBrowserRouter([
         path: "dashboard",
         Component: Dashboard,
       },
-    //   { path: 'products',   Component: Produtos   },
-    //   { path: 'orders',    Component: Pedidos    },
-    //   { path: 'shopping',    Component: Compras    },
-    //   { path: 'clients',   Component: Clientes   },
-    //   { path: '*',          Component: NotFound   },
+      { path: 'clients',   Component: Clients   },
+      { path: 'supplier',   Component: Supplier  },
+      { path: 'products',   Component: Products  },
+      { path: 'orders',   Component: Orders  },
+      { path: 'stock',   Component: Stock  },
+      { path: 'shopping',   Component: Shopping  },
     {
           path: "/*",
           Component: NotFound,
         }
     ],
   }
-  ,
-//   {
-//     path: "/home",
-//     Component: CondominoElegance,
-//   },
 ]);

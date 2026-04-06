@@ -7,7 +7,7 @@ export function NotFound() {
       <h1 className="text-2xl font-bold text-slate-700">Página não encontrada</h1>
       <p className="text-slate-400">A página que procuras não existe ou foi removida.</p>
       <Link
-        to="/"
+        to="/dashboard"
         className="mt-2 px-6 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors font-medium"
       >
         Voltar ao início

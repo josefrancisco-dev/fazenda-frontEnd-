@@ -1,7 +1,7 @@
 import type { KPI, Product, Order, Purchase, Activity, MonthlySales } from './types';
 
 export const mockKPIs: KPI[] = [
-  { label: 'Receita Total', value: 'R$ 45.230', change: 12.5, icon: 'TrendingUp' },
+  { label: 'Receita Total', value: 'AO 45.230', change: 12.5, icon: 'TrendingUp' },
   { label: 'Total de Pedidos', value: '128', change: 8.2, icon: 'ShoppingCart' },
   { label: 'Compras', value: '35', change: -3.1, icon: 'Package' },
   { label: 'Estoque Baixo', value: '12', change: 15.3, icon: 'AlertCircle' },

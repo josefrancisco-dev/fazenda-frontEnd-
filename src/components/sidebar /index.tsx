@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import {Link, useLocation } from 'react-router-dom';
-import { Menu, X, BarChart3, Package, ShoppingCart, Truck, Boxes, Users } from 'lucide-react';
+import { Menu, X, BarChart3, Package, ShoppingCart, Truck, Boxes, Users, User, Leaf } from 'lucide-react';
 
 
 const navItems = [
   { path: '/dashboard', label: 'Visão Geral', icon: BarChart3},
-  { path: '/clients', label: 'Clients', icon: Users},
+  { path: '/clients', label: 'Clientes', icon: User},
+  { path: '/supplier', label: 'Fornecedores', icon: Users},
   { path: '/products', label: 'Produtos', icon: Package},
   { path: '/orders',  label: 'Pedidos', icon: ShoppingCart },
   { path: '/shopping',  label: 'Compras', icon: Truck },
@@ -46,8 +47,8 @@ export default function Sidebar() {
         {/* Brand */}
         <div className="p-6 border-b border-slate-700">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center font-bold text-slate-800 text-sm">
-              FG
+            <div className="p-2 rounded-lg text-primary-foreground bg-yellow-600">
+              <Leaf className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-xl font-bold">Girassol</h1>
           </div>
