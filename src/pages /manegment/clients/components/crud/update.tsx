@@ -1,16 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-// import {
-//   Sheet,
-//   SheetClose,
-//   SheetContent,
-//   SheetDescription,
-//   SheetFooter,
-//   SheetHeader,
-//   SheetTitle,
-//   SheetTrigger,
-// } from "@/components/ui/sheet"
+
 import {updateClientSchema,  type updateClientTDO } from "@/schemas/client"
 import {Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,8 +9,6 @@ import {  useUpdateClient } from "@/quereis/client"
 import { Spinner } from "@/components/ui/spinner"
 import { FileDropzone } from "@/components/dropzone"
 import type { Client } from "@/types/typesApi"
-
-
 
 
 export function SheetUpdateClient({client, onClose} :  {client :  Client, onClose :  VoidFunction }) {

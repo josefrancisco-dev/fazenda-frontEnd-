@@ -26,10 +26,10 @@ function TableProductRow({orders} :  {orders  : Orders}) {
   return (
   <TableRow key={orders.id}>
       <TableCell className="text-slate-700">
-        {orders.cliente}
+        {orders.client}
       </TableCell>
       <TableCell className="text-slate-700">
-        {orders.itens} itens
+        {/* {orders.items.length} itens */}
       </TableCell>
       {/* <TableCell className="font-medium text-slate-800">
         AO {orders.total.toFixed(2).replace('.', ',')}

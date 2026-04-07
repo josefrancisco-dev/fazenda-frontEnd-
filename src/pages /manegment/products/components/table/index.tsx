@@ -97,13 +97,21 @@ export function TableProducts({data :  product}: Props) {
             <TableHead className="text-center">Ações</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>       
-          {product.map((product) => (
-            <TableProductRow 
-            key={product.id}
-            product={product}
-            />
-          ))}
+        <TableBody> 
+          {hasProduct ? (
+            product.map((product) => (
+              <TableProductRow 
+                key={product.id}
+                product={product}
+              />
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center text-slate-500 py-8">
+                Nenhum produto encontrado
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

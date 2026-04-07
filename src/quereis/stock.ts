@@ -1,4 +1,4 @@
-import type { CreateStockRequest, StockTDO } from "@/schemas/stock"
+import type { CreateStockRequest} from "@/schemas/stock"
 import { stockService } from "@/service/stock"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"

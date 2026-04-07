@@ -102,7 +102,8 @@ export interface Orders {
   total:    number
   status:   boolean
   clientId: string
-  client?:  Client
+  // client?:  Client
+  client : string
   items:    OrderItem[]
 }
 
