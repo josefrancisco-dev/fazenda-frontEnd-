@@ -29,13 +29,13 @@ function TableStockRow({stock} : {stock :  Stock}) {
               {stock.product?.name}
             </TableCell>
             <TableCell className="text-slate-500">
-              {/* {stock.categoria} */}
+              {stock.product?.category}
             </TableCell>
             <TableCell className="text-slate-700">
               {stock.quantity} {stock.product?.unit}
             </TableCell>
             <TableCell className="text-slate-700">
-              {/* AO {stock.preco_Unit.toFixed(2).replace('.', ',')} */}
+              AO {stock.product?.price.toFixed(2).replace('.', ',')}
             </TableCell>
             <TableCell className="font-medium text-slate-800">
               AO {stock.value_Total.toFixed(2).replace('.', ',')}
