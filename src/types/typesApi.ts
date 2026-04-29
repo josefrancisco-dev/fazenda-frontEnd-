@@ -1,16 +1,23 @@
+
+export interface Login {
+  email:  string 
+  password:  string
+  token: string
+}
+
 export interface Client {
   id: string
   name: string
-  role: string
+  role:  'Client'| 'Supplier' | 'Admin'
   status: 'Customer' | 'Lead' | 'Active'
   date: string
   company: string
   email: string
   phone: string
-  nif:  string
+  nif:  string 
+  password : string
   avatar?: string
 }
-
 
 export interface Product {
   id: string
@@ -61,22 +68,10 @@ export interface Shopping {
   status:  boolean
 }
 
-// export interface Stock {
-//   id: string
-//   product: string
-//   categoty: string
-//   unit: string
-//   quantity: number
-//   prece_unit: number
-//   total: number
-//   status: boolean
-//   stock: 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
-// }
-
 export interface Supplier {
   id: string
   name: string
-  role: string
+  role:  'Client'| 'Supplier' | 'Admin'
   status: 'Customer' | 'Lead' | 'Active'
   date: string
   company: string
@@ -115,3 +110,7 @@ export interface OrderItem {
   product?:  Product
   orderId:   string
 }
+
+export type AuthToken = {
+  token: string;
+};

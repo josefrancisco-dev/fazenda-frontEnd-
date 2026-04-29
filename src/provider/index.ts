@@ -1,17 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "@/pages /webSite";
-import LoginPage from "@/pages /login";
-import { AppLayout } from "@/_layuout /idenx";
-import { Dashboard } from "@/pages /manegment/dashboard";
-import { Clients } from "@/pages /manegment/clients";
-import { Supplier } from "@/pages /manegment/supplier";
-import { Products } from "@/pages /manegment/products";
-import { Orders } from "@/pages /manegment/orders";
-import { Stock } from "@/pages /manegment/stock";
-import { Shopping } from "@/pages /manegment/shopping";
-import { NotFound } from "@/pages /notFound";
-import Auth from "@/auth";
-import Acount from "@/pages /acount";
+import Home from "@/pages /public/webSite";
+import LoginPage from "@/pages /public/login";
+import { Dashboard } from "@/pages /private/dashboard";
+import { Clients } from "@/pages /private/clients";
+import { Supplier } from "@/pages /private/supplier";
+import { Products } from "@/pages /private/products";
+import { Orders } from "@/pages /private/orders";
+import { Stock } from "@/pages /private/stock";
+import { Shopping } from "@/pages /private/shopping";
+import { NotFound } from "@/pages /public/notFound";
+import Auth from "@/app/layout /appAuth";
+import Acount from "@/pages /public/acount";
+import { AppPrivate } from "@/app/layout /appPrivate";
 
 export const router = createBrowserRouter([
   { path: '/home',   
@@ -26,9 +26,10 @@ export const router = createBrowserRouter([
       {   path: "/acount", Component: Acount,}
      ],
    },
+
   {
     path: "/",
-    Component:AppLayout,
+    Component: AppPrivate,
     children: [
      { 
         index: true, 
@@ -41,10 +42,10 @@ export const router = createBrowserRouter([
       { path: 'orders',   Component: Orders  },
       { path: 'stock',   Component: Stock  },
       { path: 'shopping',   Component: Shopping  },
-    {
-          path: "/*",
-          Component: NotFound,
-        }
+     {
+      path: "/*",
+      Component: NotFound,
+    }
     ],
   }
 ]);

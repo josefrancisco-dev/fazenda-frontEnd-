@@ -2,7 +2,7 @@ import {z} from "zod"
 
 export const supplierSchema = z.object({
   name: z.string(),
-  role: z.string(),
+  role: z.enum(['Client' , 'Supplier' , 'Admin']),
   status:  z.enum(['Customer' , 'Lead' , 'Active']) ,
   // date: z.string(),
   company: z.string(),

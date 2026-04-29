@@ -26,6 +26,11 @@ class ClientService {
     return response.data
   }
 
+  async patch(id: string, data: updateClientTDO): Promise<Client> {
+    const response = await this.api.patch<Client>(`${this.route}/${id}`, data)
+    return response.data
+  }
+
   async delete(id: string): Promise<void> {
     await this.api.delete(`${this.route}/${id}`)
   }
