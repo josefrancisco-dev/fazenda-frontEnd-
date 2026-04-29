@@ -1,9 +1,10 @@
-import type { User } from '@/types/userType'
+import type { Client } from '@/types/typesApi'
+// import type { User } from '@/types/userType'
 import { create } from 'zustand'
 
 type UserStore = {
-  user: User | null
-  setUser: (user: User) => void
+  user: Client | null
+  setUser: (user: Client) => void
   clearUser: () => void
 }
 

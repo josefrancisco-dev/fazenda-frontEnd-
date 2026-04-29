@@ -3,6 +3,7 @@ import KPICard from "./cards";
 import { SalesChart } from "./chart";
 import WeatherWidget from "./weatherWidget";
 import { TableDashboard } from "./table";
+import { useGetMe } from "@/quereis/useAuth";
 
 
 export const metadata = {
@@ -11,12 +12,17 @@ export const metadata = {
 };
 
 export function DashboardAdmin() {
+
+  const { data: response } = useGetMe();
+  const data = response as any;
+  const userName = data?.client?.name || "Usuário";
+
   return (
     <div className="p-4 md:p-8 space-y-8">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">Visão Geral</h1>
-        <p className="text-muted-foreground mt-2">Bem-vindo ao dashboard da Fazenda Girassol</p>
+        <p className="text-muted-foreground mt-2"> {userName} Bem-vindo ao seu dashboard</p>
       </div>
 
       {/* KPI Cards */}

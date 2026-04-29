@@ -2,6 +2,7 @@ import type { LoginDTO } from "@/schemas/auth"
 import { loginService } from "@/service/auth"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 
 export function useAuth() {
@@ -18,7 +19,16 @@ export function useAuth() {
       // salvar token
     localStorage.setItem("token", data.token)
     navigate("/dashboard")
-    }
+    },
+
+  onError: (error: any) => {
+  console.log(error)  
+  const message =
+    error?.response?.data?.message ||
+    "Email ou senha inválidos"
+
+  toast.error(message)
+}
   })
 }
 

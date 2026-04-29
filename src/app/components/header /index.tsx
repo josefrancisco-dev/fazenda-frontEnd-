@@ -1,11 +1,15 @@
 // import { CartSheet } from '@/pages /orders/components/crud/cartSheet';
 import { CartSheet } from '@/pages /private/orders/components/crud/cartSheet';
+import { useGetMe } from '@/quereis/useAuth';
 import { LogOut, Settings} from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+   const { data: response } = useGetMe();
+  const data = response as any;
+  const userName = data?.client?.name || "Usuário";
 
   const handleLogout = () => {
     alert('Logout realizado com sucesso!');
@@ -26,9 +30,11 @@ export default function Header() {
             className="flex items-center gap-2 p-2 hover:bg-muted rounded-lg transition-colors"
           >
             <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center text-sm font-bold text-primary">
-              FG
+              {userName.charAt(0).toUpperCase()}
             </div>
-            <span className="text-sm font-medium text-foreground hidden sm:inline">Gestor</span>
+            <span className="text-sm font-medium text-foreground hidden sm:inline">
+              {userName}
+            </span>
           </button>
 
           {/* Dropdown Menu */}

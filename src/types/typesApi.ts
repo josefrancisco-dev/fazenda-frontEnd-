@@ -1,4 +1,6 @@
 
+export type Role    = 'Client' | 'Supplier' | 'Admin'
+
 export interface Login {
   email:  string 
   password:  string
@@ -8,7 +10,7 @@ export interface Login {
 export interface Client {
   id: string
   name: string
-  role:  'Client'| 'Supplier' | 'Admin'
+  role:  Role
   status: 'Customer' | 'Lead' | 'Active'
   date: string
   company: string
