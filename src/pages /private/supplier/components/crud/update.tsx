@@ -1,15 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import {Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
@@ -17,8 +7,9 @@ import { Spinner } from "@/components/ui/spinner"
 import { useCreateSupplier } from "@/quereis/useSupplier"
 import { supplierSchema, type supplierSchemaTDO } from "@/schemas/supplier"
 import type { Supplier } from "@/types/typesApi"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export function SheetUpdateClient({supplier, onClose} : {supplier :  Supplier, onClose :  VoidFunction }) {
+export function SheetUpdateSupllier({supplier, onClose} : {supplier :  Supplier, onClose :  VoidFunction }) {
   
   const {mutateAsync, isPending} = useCreateSupplier()
 
@@ -47,18 +38,6 @@ export function SheetUpdateClient({supplier, onClose} : {supplier :  Supplier, o
   } 
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-         <Button >Adicionar Fornecedor</Button> 
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Adicionar Fornecedor</SheetTitle>
-          <SheetDescription>
-            Preecha os dados do fornecedor e clica em salvar 
-          </SheetDescription>
-        </SheetHeader>
-
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
           <form className="space-y-4" id = "form-rhf-demo"  onSubmit={form.handleSubmit(onSubmit)}>    
             <Controller
@@ -200,23 +179,21 @@ export function SheetUpdateClient({supplier, onClose} : {supplier :  Supplier, o
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="status">
-                     Estado 
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="status"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Estado"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
+                  <FieldLabel htmlFor="status">Estado</FieldLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger id="status" aria-invalid={fieldState.invalid}>
+                      <SelectValue placeholder="Selecione um estado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Active">Activo</SelectItem>
+                      <SelectItem value="Customer">Cliente</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
-
+                          
             <Controller
               name="avatar"
               control={form.control}
@@ -239,21 +216,15 @@ export function SheetUpdateClient({supplier, onClose} : {supplier :  Supplier, o
                 </Field>
               )}
             />
-
-          </form>
-        </div>
-
-        <SheetFooter>
+            
           <Button
-           type="submit" 
-           form = "form-rhf-demo">
+          //  type="submit" 
+          // form = ""
+          className="w-full"
+          >
              {isPending ? <Spinner />: "Cadastrar" }
            </Button>
-          <SheetClose asChild>
-            <Button variant="outline">Sair</Button>
-          </SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+          </form>
+        </div>
   )
 }

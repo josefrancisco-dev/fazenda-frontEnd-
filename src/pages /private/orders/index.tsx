@@ -1,4 +1,4 @@
-import { SheetCreateOrders } from "./components/crud/creat";
+// import { SheetCreateOrders } from "./components/crud/creat";
 import { FilterBar } from "./components/filter";
 import { TabsClients } from "./components/tabs";
 
@@ -16,7 +16,7 @@ export function Orders() {
           <h1 className="text-3xl font-bold text-foreground">Pedidos</h1>
           {/* <p className="text-muted-foreground mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor similique ab et a ex consectetur laborum fuga of</p> */}
         </div>
-         <SheetCreateOrders />
+         {/* <SheetCreateOrders /> */}
       </div>
 
       <div >

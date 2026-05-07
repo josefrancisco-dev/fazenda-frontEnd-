@@ -8,7 +8,7 @@ export function TabsClients() {
   const {data} = useGetAllProduct()
 
   return (
-   <Tabs defaultValue="Visualizar por Lista">
+   <Tabs defaultValue="Visualizar por Grade">
       {/* Botões de navegação */}
       <TabsList variant="line">
         <TabsTrigger 
@@ -33,7 +33,9 @@ export function TabsClients() {
       </TabsContent>
 
       <TabsContent value="Visualizar por Grade" className="mt-4 cursor-pointer">
-        <ProductsGrid/>
+        <ProductsGrid
+          data  = {data ?? []}
+        />
       </TabsContent>
     </Tabs>
   )

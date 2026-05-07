@@ -48,7 +48,7 @@ export const  useUpdateClient  =  () => {
       return response
     },
     onSuccess: async () => {
-      toast.success('Cliente criado com sucesso !', {
+      toast.success('Cliente actualizado com sucesso !', {
         action: {
           label: 'Fechar',
           onClick: () => toast.dismiss(),
@@ -57,7 +57,7 @@ export const  useUpdateClient  =  () => {
       queryClient.invalidateQueries({ queryKey: ['client'] })
     },
     onError: () => {
-      toast.error('Alguma coisa deu errado !')
+      toast.error('Alguma coisa deu errado ao actualizar cliente !')
     },
   })
 }

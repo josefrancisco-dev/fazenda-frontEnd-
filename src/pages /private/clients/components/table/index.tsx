@@ -77,7 +77,7 @@ function ClientTableRow({client, onAction} :  {client : Client, onAction: (onAct
           <TableCell className="text-slate-400 text-sm whitespace-nowrap">
             {client.date}
           </TableCell>
-          <TableCell className="text-right">
+          <TableCell className="">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="size-8">
@@ -131,7 +131,7 @@ export function TableClients({data : client} : Props) {
             <TableHead>Email</TableHead>
             <TableHead>Telefone</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Data</TableHead>
+            <TableHead>Data de Cadastro</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -154,7 +154,7 @@ export function TableClients({data : client} : Props) {
         </TableBody>
       </Table>
 
-       {active && selected && action && (
+      {active && selected && action && (
         <ClientSheetModal action={action} client={selected} controls={{ open: active, close: onClose }} />
       )}
     </div>

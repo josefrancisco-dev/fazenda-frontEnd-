@@ -1,4 +1,4 @@
-import type { shoppingTDO } from "@/schemas/shopping"
+import type { shoppingTDO, updateShoppingTDO } from "@/schemas/shopping"
 import { shoppingService } from "@/service/shopping"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
@@ -38,26 +38,26 @@ export const  useCreateShopping  =  () => {
   })
 }
 
-// export const  useUpdateClient  =  () => {
-//  const queryClient = useQueryClient()
+export const  useUpdateShopping  =  () => {
+ const queryClient = useQueryClient()
 
-//   return useMutation({
-//     mutationKey: ['client'],
-//     mutationFn: async ({id , data} :  {id: string, data: updateClientTDO}) => {
-//       const response = await clientService.update({id , data})
-//       return response
-//     },
-//     onSuccess: async () => {
-//       toast.success('Cliente criado com sucesso !', {
-//         action: {
-//           label: 'Fechar',
-//           onClick: () => toast.dismiss(),
-//         },
-//       })
-//       queryClient.invalidateQueries({ queryKey: ['client'] })
-//     },
-//     onError: () => {
-//       toast.error('Alguma coisa deu errado !')
-//     },
-//   })
-// }
+  return useMutation({
+    mutationKey: ['client'],
+    mutationFn: async ({id , data} :  {id: string, data: updateShoppingTDO}) => {
+      const response = await shoppingService.update(id , data)
+      return response
+    },
+    onSuccess: async () => {
+      toast.success('Cliente criado com sucesso !', {
+        action: {
+          label: 'Fechar',
+          onClick: () => toast.dismiss(),
+        },
+      })
+      queryClient.invalidateQueries({ queryKey: ['client'] })
+    },
+    onError: () => {
+      toast.error('Alguma coisa deu errado !')
+    },
+  })
+}

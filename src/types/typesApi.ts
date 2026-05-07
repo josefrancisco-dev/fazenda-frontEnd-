@@ -1,6 +1,8 @@
 
 export type Role    = 'Client' | 'Supplier' | 'Admin'
 
+export type StatuStocks = 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
+
 export interface Login {
   email:  string 
   password:  string
@@ -21,20 +23,6 @@ export interface Client {
   avatar?: string
 }
 
-export interface Product {
-  id: string
-  name: string
-  category: string
-  quantity: number
-  unit: string
-  price: number
-  stock: 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
-  stockrs : Stock [] 
-  banner: string
-  emoji: string
-  image?:  string
-}
-
 // interface certa
 export interface Product {
   id:       string
@@ -46,6 +34,7 @@ export interface Product {
   banner:   string
   emoji:    string
   image?:   string
+  stock: 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
   stocks:      Stock[]
   orderItems:  OrderItem[]
 }
@@ -99,8 +88,7 @@ export interface Orders {
   total:    number
   status:   boolean
   clientId: string
-  // client?:  Client
-  client : string
+  client:  Client
   items:    OrderItem[]
 }
 
@@ -109,7 +97,7 @@ export interface OrderItem {
   quantity:  number
   price:     number   
   productId: string
-  product?:  Product
+  product:  Product
   orderId:   string
 }
 

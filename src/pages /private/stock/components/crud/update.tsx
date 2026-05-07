@@ -1,15 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
@@ -18,16 +8,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { stockSchema, type StockTDO, type CreateStockRequest } from "@/schemas/stock"
 import { useCreateStock } from "@/quereis/useStock"
 import { useGetAllProduct } from "@/quereis/useProduct"
+import type { Stock } from "@/types/typesApi"
 
-export function SheetCreateStock() {
+
+
+export function SheetUpdateStock({stock, onClose} :  {stock :  Stock, onClose :  VoidFunction })  {
   const { mutateAsync, isPending } = useCreateStock()
   const { data: products, isLoading: productsLoading } = useGetAllProduct() 
 
   const form = useForm<StockTDO>({
     resolver: zodResolver(stockSchema),
     defaultValues: {
-      quantity: 0,
-      productId: "",
+      quantity: stock.quantity,
+      productId: String(stock.productId),
     }
   })
 
@@ -52,18 +45,6 @@ export function SheetCreateStock() {
   }
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button>Adicionar Estoque</Button>
-      </SheetTrigger>
-      <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Adicionar Estoque</SheetTitle>
-          <SheetDescription>
-            Selecione o produto e informe a quantidade inicial em estoque
-          </SheetDescription>
-        </SheetHeader>
-
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
           <form className="space-y-4" id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
             
@@ -96,7 +77,6 @@ export function SheetCreateStock() {
               )}
             />
 
-            {/* Quantidade */}
             <Controller
               name="quantity"
               control={form.control}
@@ -120,7 +100,6 @@ export function SheetCreateStock() {
               )}
             />
 
-            {/* Informação adicional */}
             {form.watch("productId") && form.watch("quantity") > 0 && (
               <div className="mt-4 p-3 bg-muted rounded-md">
                 <p className="text-sm font-medium">Resumo:</p>
@@ -135,22 +114,15 @@ export function SheetCreateStock() {
                 </p>
               </div>
             )}
+
+            <Button 
+              // type="submit" 
+              // form="form-rhf-demo"
+              disabled={isPending || !form.watch("productId") || form.watch("quantity") <= 0}
+            >
+              {isPending ? <Spinner /> : "Cadastrar Estoque"}
+            </Button>
           </form>
         </div>
-
-        <SheetFooter>
-          <Button 
-            type="submit" 
-            form="form-rhf-demo"
-            disabled={isPending || !form.watch("productId") || form.watch("quantity") <= 0}
-          >
-            {isPending ? <Spinner /> : "Cadastrar Estoque"}
-          </Button>
-          <SheetClose asChild>
-            <Button variant="outline">Sair</Button>
-          </SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
   )
 }

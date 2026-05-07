@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ShoppingCart, ShoppingBag, Trash2 } from 'lucide-react'
+import { ShoppingCart, ShoppingBag, Trash2, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -9,10 +9,17 @@ import {
   SheetFooter,
 } from '@/components/ui/sheet'
 import { useCart } from '@/hooks/useCart'
+import { useCreateOrders } from '@/quereis/useOrders'
 
 export function CartSheet() {
   const [open, setOpen] = useState(false)
   const { items, deleteItem, total, count } = useCart()
+  const { mutateAsync, isPending } = useCreateOrders()
+
+  const handleCheckout = async () => {
+    await mutateAsync()
+    setOpen(false)
+  }
 
   return (
     <>
@@ -54,7 +61,17 @@ export function CartSheet() {
                   key={item.id}
                   className="flex items-center gap-3 p-3 rounded-lg border border-slate-100 bg-slate-50"
                 >
-                  <span className="text-2xl">{item.emoji}</span>
+                  <span className="text-2xl">
+                     {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-10 h-10 object-cover rounded-md"
+                      />
+                    ) : (
+                      <span></span>
+                    )}
+                  </span>
                   <div className="flex-1">
                     <p className="font-medium text-slate-800 text-sm">{item.name}</p>
                     <p className="text-xs text-slate-400">
@@ -86,8 +103,19 @@ export function CartSheet() {
                   AO {total.toFixed(2).replace('.', ',')}
                 </span>
               </div>
-              <Button onClick={() => { alert('Compra concluída!'); setOpen(false) }}>
-                Concluir Compra
+              <Button
+                onClick={handleCheckout}
+                disabled={isPending}
+                className="w-full"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin mr-2" />
+                    Processando...
+                  </>
+                ) : (
+                  'Concluir Compra'
+                )}
               </Button>
             </SheetFooter>
           )}

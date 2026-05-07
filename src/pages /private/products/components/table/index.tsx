@@ -1,4 +1,6 @@
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -7,21 +9,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { PERMISSION } from "@/constants/permitions"
+import { useSelected } from "@/hooks/useSelected"
 import { CartCounterRow } from "@/pages /private/orders/components/crud/cartCounter"
+import { useUserStore } from "@/stores/useUserStore"
+import { ActionOption } from "@/types/enums"
 import type { Product } from "@/types/typesApi"
+import { MoreHorizontalIcon } from "lucide-react"
+import React from "react"
+import { ProductSheetModal } from "../crud"
 
-
-// const products: Product[] = [
-//   { id: '1', name: 'Milho Orgânico',  category: 'Grãos',    quantity: 450, unit: 'kg',       price: 3.50, stock: 'Em Estoque',    emoji: '🌽', banner: 'from-yellow-400 to-yellow-600' },
-//   { id: '2', name: 'Feijão Carioca',  category: 'Grãos',    quantity: 120, unit: 'kg',       price: 5.20, stock: 'Estoque Médio', emoji: '🫘', banner: 'from-amber-700 to-amber-900'   },
-//   { id: '3', name: 'Tomate Cherry',   category: 'Frutas',   quantity: 35,  unit: 'crates',   price: 8.75, stock: 'Estoque Baixo', emoji: '🍅', banner: 'from-red-400 to-red-600'       },
-//   { id: '4', name: 'Alface Crespa',   category: 'Verduras', quantity: 280, unit: 'unidades', price: 2.15, stock: 'Em Estoque',    emoji: '🥬', banner: 'from-green-400 to-green-600'   },
-//   { id: '5', name: 'Cenoura Roxa',    category: 'Verduras', quantity: 95,  unit: 'kg',       price: 4.30, stock: 'Estoque Médio', emoji: '🥕', banner: 'from-orange-400 to-orange-600' },
-//   { id: '6', name: 'Uva', category: 'Frutas', quantity: 45,  unit: 'kg', price: 6.80, stock: 'Estoque Médio', emoji: '🍇', banner: 'from-violet-500 to-amber-700'   },
-// ]
 
 interface Props {
-  data  :  Product[]
+  data : Product[]
 }
 
 const stockConfig: Record<Product['stock'], { badge: string }> = {
@@ -31,8 +31,11 @@ const stockConfig: Record<Product['stock'], { badge: string }> = {
 }
 
 
-function TableProductRow({product}  : {product :  Product}) {
-  return(
+function TableProductRow({product, onAction}  : {product :  Product, onAction: (onAction: Product, action: ActionOption) => void }) {
+    const { user } = useUserStore((state) => state)
+    const isAdmin = user?.role === PERMISSION.Admin
+
+return(
 <TableRow key={product.id}>
         <TableCell className="font-medium text-slate-700">
           <div className="flex items-center gap-2">
@@ -65,21 +68,59 @@ function TableProductRow({product}  : {product :  Product}) {
           {product.stock || <span className="text-red-500 text-xs">Sem stock</span>}
         </Badge>
         </TableCell>
-        <TableCell>
-          <div className="flex items-center justify-center">
-            <CartCounterRow product={{
-              id:    product.id,
-              name:  product.name,
-              emoji: product.emoji,
-              price: product.price,
-            }} />
-          </div>
-        </TableCell>
+        {isAdmin ?  (
+         <TableCell className="text-center">  
+          <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="size-8">
+                  <MoreHorizontalIcon />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                  <DropdownMenuGroup className="cursor-pointer">
+                  {Object.entries(ActionOption).map(([value, label]) => (
+                    <DropdownMenuItem 
+                      key={value} 
+                      onClick={() => onAction(product, label)} 
+                      className="cursor-pointer">
+                      {label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+          </DropdownMenu>
+          </TableCell>  
+          ) :  (
+          <TableCell> 
+            <div className="flex items-center justify-center">
+                <CartCounterRow product={{
+                  id:    product.id,
+                  name:  product.name,
+                  emoji: product.emoji,
+                  price: product.price,
+                }} />
+            </div>
+           </TableCell> 
+          )}
     </TableRow>
   )
 }
 
 export function TableProducts({data :  product}: Props) {
+  
+    const { active, close, onSelected, selected } = useSelected<Product>()
+    const [action, setAction] = React.useState<ActionOption | null>(null)
+  
+     const handleSelection = (product : Product, action: ActionOption) => {
+      setAction(action)
+      onSelected(product)
+    }
+  
+    const onClose = () => {
+      close()
+      setAction(null)
+    }
 
   const hasProduct = product && product.length > 0
 
@@ -103,6 +144,7 @@ export function TableProducts({data :  product}: Props) {
               <TableProductRow 
                 key={product.id}
                 product={product}
+                onAction={handleSelection}
               />
             ))
           ) : (
@@ -114,6 +156,11 @@ export function TableProducts({data :  product}: Props) {
           )}
         </TableBody>
       </Table>
+
+
+    {active && selected && action && (
+      <ProductSheetModal action={action} product={selected} controls={{ open: active, close: onClose }} />
+    )}
     </div>
   )
 }

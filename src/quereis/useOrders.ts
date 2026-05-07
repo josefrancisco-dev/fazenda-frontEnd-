@@ -1,63 +1,60 @@
 import type { orderResponseTDO } from "@/schemas/orders"
 import { ordersService } from "@/service/orders"
+import { useCart } from "@/hooks/useCart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
-
 export const useGetAllOrders = () => {
-   return useQuery({
+  return useQuery({
     queryKey: ['orders'],
-    queryFn: async () => {
-      const response = await ordersService.getAll()
-      return response
-    },
-   })
+    queryFn: () => ordersService.getAll(),
+  })
 }
 
-export const  useCreateOrders  =  () => {
- const queryClient = useQueryClient()
-
+export const useCreateOrders = () => {
+  const queryClient = useQueryClient()
+  const { items, clearCart } = useCart()   
   return useMutation({
     mutationKey: ['orders'],
-    mutationFn: async (data: orderResponseTDO) => {
-      const response = await ordersService.create(data)
-      return response
+    mutationFn: () => {
+      const payload: orderResponseTDO = {
+        number: Date.now(),               
+        date:   new Date().toISOString(),
+        total:  items.reduce((acc, item) => acc + item.price * item.quantity, 0),
+        items:  items.map(item => ({
+          quantity:  item.quantity,
+          price:     item.price,
+          productId: item.id,
+        }))
+      }
+
+      return ordersService.create(payload)
     },
-    onSuccess: async () => {
-      toast.success('Pedido feito com sucesso !', {
-        action: {
-          label: 'Fechar',
-          onClick: () => toast.dismiss(),
-        },
-      })
+    onSuccess: () => {
+      clearCart()                        
       queryClient.invalidateQueries({ queryKey: ['orders'] })
+      toast.success('Pedido feito com sucesso!', {
+        action: { label: 'Fechar', onClick: () => toast.dismiss() }
+      })
     },
-    onError: () => {
-      toast.error('Alguma coisa deu errado !')
+    onError: (error) => {
+      console.log("erro : ", error)
+      toast.error('Alguma coisa deu errado!')
     },
   })
 }
 
-// export const  useUpdateClient  =  () => {
-//  const queryClient = useQueryClient()
+// export const useDeleteOrder = () => {
+//   const queryClient = useQueryClient()
 
 //   return useMutation({
-//     mutationKey: ['client'],
-//     mutationFn: async ({id , data} :  {id: string, data: updateClientTDO}) => {
-//       const response = await clientService.update({id , data})
-//       return response
-//     },
-//     onSuccess: async () => {
-//       toast.success('Cliente criado com sucesso !', {
-//         action: {
-//           label: 'Fechar',
-//           onClick: () => toast.dismiss(),
-//         },
-//       })
-//       queryClient.invalidateQueries({ queryKey: ['client'] })
+//     mutationFn: (id: string) => ordersService.delete(id),
+//     onSuccess: () => {
+//       queryClient.invalidateQueries({ queryKey: ['orders'] })
+//       toast.success('Pedido removido!')
 //     },
 //     onError: () => {
-//       toast.error('Alguma coisa deu errado !')
+//       toast.error('Erro ao remover pedido!')
 //     },
 //   })
 // }

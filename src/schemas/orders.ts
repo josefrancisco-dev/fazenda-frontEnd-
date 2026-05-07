@@ -1,17 +1,41 @@
-import { z } from 'zod'
+// import { z } from 'zod'
 
-export const orderResponseSchema = z.object({
-  // number: z.number(),
-  client: z.string(),
-  // date: z.string(),
-  itens: z.number(),
-  // total: z.number(),
-  status: z.string(),
+// export const orderResponseSchema = z.object({
+//   // number: z.number(),
+//   client: z.string(),
+//   // date: z.string(),
+//   itens: z.number(),
+//   // total: z.number(),
+//   status: z.string(),
+// })
+
+// export type orderResponseTDO = z.infer<typeof orderResponseSchema>
+
+// export const updateOrderSchema = orderResponseSchema.partial().extend({
+//   id: z.string(),
+// })
+
+// export type updateOrderDTO = z.infer<typeof updateOrderSchema>
+
+import z from 'zod'
+
+
+export const orderItemSchema = z.object({
+  quantity:  z.number().min(1),
+  price:     z.number().min(0),
+  productId: z.string().uuid(),
 })
 
-export type orderResponseTDO = z.infer<typeof orderResponseSchema>
+export const orderSchema = z.object({
+  number: z.number(),
+  date:   z.string(),
+  total:  z.number().min(0),
+  items:  z.array(orderItemSchema).min(1, 'Adicione pelo menos um item'),
+})
 
-export const updateOrderSchema = orderResponseSchema.partial().extend({
+export type orderResponseTDO = z.infer<typeof orderSchema>
+
+export const updateOrderSchema = orderSchema.partial().extend({
   id: z.string(),
 })
 

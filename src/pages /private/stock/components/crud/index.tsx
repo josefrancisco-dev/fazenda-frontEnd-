@@ -8,22 +8,23 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import {SheetUpdateSupllier} from "./update";
+
 import { ActionOption } from "@/types/enums";
-import type {Supplier } from "@/types/typesApi";
-import { Read } from "./read";
+import type {Stock } from "@/types/typesApi";
+// import { Read } from "./read";
 import { Button } from "@/components/ui/button";
+import { SheetUpdateStock } from "./update";
 
 type Props = {
   action: ActionOption;
-  supplier: Supplier;
+  stock: Stock;
   controls: {
     open: boolean;
     close: VoidFunction;
   };
 };
 
-export function SupplierSheetModal({ action, supplier, controls }: Props) {
+export function StockSheetModal({ action, stock, controls }: Props) {
 
   const isUpdate = action === ActionOption.UPDATE;
   const isView = action === ActionOption.VIEW;
@@ -35,17 +36,18 @@ export function SupplierSheetModal({ action, supplier, controls }: Props) {
       >
         <SheetHeader>
           <SheetTitle>
-            {isUpdate ? "Editar Fornecedor " : "Detalhes do Fornecedor"}
+            {isUpdate ? "Editar Stock" : "Detalhes do Stock"}
           </SheetTitle>
           <SheetDescription>
             {isUpdate
-              ? "Altere os dados do Fornecedor e clique em guardar."
-              : "Visualize os detalhes do Fornecedor."}
+              ? "Altere os dados do stock e clique em guardar."
+              : "Visualize os detalhes do client."
+            }
           </SheetDescription>
         </SheetHeader>
         <div className="">
-          {isUpdate && <SheetUpdateSupllier supplier={supplier} onClose={controls.close} />}
-          {isView && <Read supplier={supplier} />}
+          {isUpdate && <SheetUpdateStock stock={stock} onClose={controls.close} />}
+          {/* {isView && <Read client={client} />} */}
         </div>
     
         <SheetFooter>

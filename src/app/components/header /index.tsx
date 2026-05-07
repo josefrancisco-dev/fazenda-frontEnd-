@@ -11,6 +11,7 @@ export default function Header() {
   const { user } = useUserStore((state) => state); 
 
   const userName = user?.name || "Usuário";
+  const isClient = user?.role === "Client"
 
   const logout = async () => {
     mutateAsync().catch((error) => {
@@ -22,7 +23,9 @@ export default function Header() {
     <header className="fixed top-0 left-0 right-0 h-16 bg-white border-b border-border z-30 md:ml-64">
       <div className="h-full px-4 md:px-8 flex items-center justify-between">
         <div>
-          <CartSheet />
+          {isClient && ( 
+            <CartSheet />
+          )}
         </div>
 
         <div className="relative">

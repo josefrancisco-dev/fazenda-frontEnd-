@@ -19,6 +19,7 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
   const form =  useForm({
     resolver : zodResolver(updateClientSchema),
      defaultValues :  {
+        id :  client.id,
         name:  client.name,
         role:  client.role,
         status:  client.status,
@@ -32,6 +33,8 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
   })
 
   const onSubmit = (data : updateClientTDO) => {
+
+   console.log("Dados a serem eviados para ser actualizados :  ", data)
 
     mutateAsync({id : client.id , data})
     .then(() => {

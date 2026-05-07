@@ -4,8 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -18,6 +18,10 @@ import {
 } from "@/components/ui/table"
 import { MoreHorizontalIcon} from "lucide-react"
 import type {Supplier } from "@/types/typesApi"
+import { ActionOption } from "@/types/enums"
+import React from "react"
+import { useSelected } from "@/hooks/useSelected"
+import { SupplierSheetModal } from "../crud"
 
 type Props = {
   data: Supplier[]
@@ -36,7 +40,7 @@ function getInitials(name: string) {
   return name.split(' ').map((n) => n[0]).join('').toUpperCase()
 }
 
-function ClientTableRow({supplier} :  {supplier : Supplier}) {
+function ClientTableRow({supplier, onAction} :  {supplier : Supplier,  onAction: (onAction: Supplier, action: ActionOption) => void }) {
      return( 
         <TableRow key={supplier.id}>
           <TableCell>
@@ -74,28 +78,46 @@ function ClientTableRow({supplier} :  {supplier : Supplier}) {
             {supplier.date}
           </TableCell>
           <TableCell className="text-right">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-8">
-                  <MoreHorizontalIcon />
-                  <span className="sr-only">Abrir menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                <DropdownMenuItem>Editar</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  Remover
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+             <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="size-8">
+                <MoreHorizontalIcon />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+                <DropdownMenuGroup className="cursor-pointer">
+                {Object.entries(ActionOption).map(([value, label]) => (
+                  <DropdownMenuItem 
+                    key={value} 
+                    onClick={() => onAction(supplier, label)} 
+                    className="cursor-pointer">
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
           </TableCell>
         </TableRow>     
      )
 }
 
 export function TableSuppliers({data : supplier} : Props) {
+
+    const { active, close, onSelected, selected } = useSelected<Supplier>()
+    const [action, setAction] = React.useState<ActionOption | null>(null)
+  
+     const handleSelection = (supplier : Supplier, action: ActionOption) => {
+      setAction(action)
+      onSelected(supplier)
+    }
+  
+    const onClose = () => {
+      close()
+      setAction(null)
+    }
+    
   
   const hasClients = supplier && supplier.length > 0
 
@@ -110,7 +132,7 @@ export function TableSuppliers({data : supplier} : Props) {
             <TableHead>Email</TableHead>
             <TableHead>Telefone</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Data</TableHead>
+            <TableHead>Data de Cadastro</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -120,6 +142,7 @@ export function TableSuppliers({data : supplier} : Props) {
               <ClientTableRow 
                key={supplier.id}
                supplier={supplier}
+               onAction={handleSelection}
               />
             ))
           ) :  (
@@ -131,6 +154,10 @@ export function TableSuppliers({data : supplier} : Props) {
           )}
         </TableBody>
       </Table>
+
+      {active && selected && action && (
+        <SupplierSheetModal action={action} supplier={selected} controls={{ open: active, close: onClose }} />
+       )}
     </div>
   )
 }

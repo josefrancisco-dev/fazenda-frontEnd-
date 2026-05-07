@@ -8,11 +8,12 @@ interface CartCounterProps {
     id: string
     name: string
     emoji: string
+    image?: string 
     price: number
   }
 }
 
-export function CartCounter({ product }: CartCounterProps) {
+export function CartCounterCard({ product }: CartCounterProps) {
   const { user } = useUserStore((state) => state); 
   const isClient = user?.role === "Client"
 
@@ -54,3 +55,35 @@ export function CartCounter({ product }: CartCounterProps) {
     </div>
   )
 }
+
+
+export function CartCounterRow({ product }: CartCounterProps) {
+  const { items, addItem, removeItem } = useCart()
+  const productQty = items.find((i) => i.id === product.id)?.quantity ?? 0
+
+  return (
+    <div className="flex items-center gap-1 border border-slate-200 rounded-md overflow-hidden w-fit">
+      <button
+        onClick={() => removeItem(product.id)}
+        className="px-2 py-1 text-slate-500 hover:bg-slate-100 transition-colors"
+      >
+        <Minus size={11} />
+      </button>
+
+      <span className="text-xs font-semibold text-slate-700 px-2 min-w-[20px] text-center border-x border-slate-200">
+        {productQty}
+      </span>
+
+      <button
+        onClick={() => addItem(product)}
+        className="px-2 py-1 text-slate-500 hover:bg-slate-100 transition-colors"
+      >
+        <Plus size={11} />
+      </button>
+    </div>
+  )
+}
+
+
+
+

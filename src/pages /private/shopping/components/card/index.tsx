@@ -1,15 +1,19 @@
-import { MoreHorizontal, Calendar, Package, CreditCard } from 'lucide-react'
+import { Calendar, Package, CreditCard, MoreHorizontalIcon } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { Shopping } from '@/types/typesApi'
+import { ActionOption } from '@/types/enums'
+import { useSelected } from '@/hooks/useSelected'
+import React from 'react'
+import { ShoopingSheetModal } from '../crud'
 
 interface Props {
   data : Shopping[]
@@ -19,7 +23,7 @@ function getInitials(name: string) {
   return name.split(' ').map((n) => n[0]).join('').toUpperCase()
 }
 
-function ShoppingCard({ shopping }: { shopping: Shopping }) {
+function ShoppingCard({ shopping , onAction}: { shopping: Shopping, onAction :  (onAction : Shopping ,  action : ActionOption ) => void}) {
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-5 space-y-4">
@@ -36,17 +40,24 @@ function ShoppingCard({ shopping }: { shopping: Shopping }) {
             </div>
           </div>
 
-          <DropdownMenu>
+        <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-8 text-slate-400">
-                <MoreHorizontal size={16} />
+              <Button variant="ghost" size="icon" className="size-8">
+                <MoreHorizontalIcon />
+                <span className="sr-only">Open menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-              <DropdownMenuItem>Editar</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">Remover</DropdownMenuItem>
+                <DropdownMenuGroup className="cursor-pointer">
+                {Object.entries(ActionOption).map(([value, label]) => (
+                  <DropdownMenuItem 
+                    key={value} 
+                    onClick={() => onAction(shopping, label)} 
+                    className="cursor-pointer">
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -90,11 +101,35 @@ function ShoppingCard({ shopping }: { shopping: Shopping }) {
 }
 
 export function ShoppingGrid({data :  shopping} :  Props) {
-  return (
+
+  const { active, close, onSelected, selected } = useSelected<Shopping>()
+  const [action, setAction] = React.useState<ActionOption | null>(null)
+    
+  const handleSelection = (shopping : Shopping, action: ActionOption) => {
+  setAction(action)
+  onSelected(shopping)
+}
+    
+const onClose = () => {
+  close()
+  setAction(null)
+}
+
+return (
+  <>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {shopping.map((shopping) => (
-        <ShoppingCard key={shopping.id} shopping={shopping} />
-      ))}
-    </div>
+        {shopping.map((shopping) => (
+          <ShoppingCard 
+          key={shopping.id} 
+          shopping={shopping}
+          onAction={handleSelection}
+          />
+        ))}
+      </div>
+
+  {active && selected && action && (
+    <ShoopingSheetModal action={action} shopping={selected} controls={{ open: active, close: onClose }} />
+  )}
+  </>
   )
 }

@@ -17,23 +17,24 @@ import {
 } from "@/components/ui/table"
 import { MoreHorizontalIcon } from "lucide-react"
 import type { Orders } from "@/types/typesApi"
+import { useFormatDate } from "@/hooks/useFormatDate"
 
 interface Props {
   data :  Orders[]
 }
 
 function TableProductRow({orders} :  {orders  : Orders}) {
+
+  const formattedDate = useFormatDate(orders.date)
+
   return (
   <TableRow key={orders.id}>
       <TableCell className="text-slate-700">
-        {orders.client}
+        {orders.client?.name}
       </TableCell>
       <TableCell className="text-slate-700">
-        {/* {orders.items.length} itens */}
+        {orders.items.length} itens
       </TableCell>
-      {/* <TableCell className="font-medium text-slate-800">
-        AO {orders.total.toFixed(2).replace('.', ',')}
-      </TableCell> */}
       <TableCell>
         <Badge className={
           orders.status
@@ -42,6 +43,9 @@ function TableProductRow({orders} :  {orders  : Orders}) {
         }>
           {orders.status ? 'Concluído' : 'Pendente'}
         </Badge>
+      </TableCell>
+       <TableCell className="text-slate-700">
+        {formattedDate} 
       </TableCell>
       <TableCell className="text-right">
         <DropdownMenu>
@@ -74,6 +78,7 @@ export function TableProducts({data :  orders} : Props) {
             <TableHead>Cliente</TableHead>
             <TableHead>Itens</TableHead>
             <TableHead>Estado</TableHead>
+            <TableHead>Data de Selicitação</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>

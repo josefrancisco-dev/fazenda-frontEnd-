@@ -9,26 +9,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import type { Orders } from '@/types/typesApi'
+import { useFormatDate } from '@/hooks/useFormatDate'
+import { useUserStore } from '@/stores/useUserStore'
+import { PERMISSION } from '@/constants/permitions'
 
-interface Orders {
-  id: string
-  number: number
-  cliente: string
-  date: string
-  itens: number
-  total: number
-  status: boolean
+interface Props {
+  data :  Orders[]
 }
 
-const orders: Orders[] = [
-  { id: '1', number: 1001, cliente: 'Supermercado Central', date: '2024-03-17', itens: 5,  total: 1250.00, status: true  },
-  { id: '2', number: 1002, cliente: 'Mercearia do João',    date: '2024-03-16', itens: 3,  total: 430.50,  status: false },
-  { id: '3', number: 1003, cliente: 'Restaurante Savana',   date: '2024-03-15', itens: 8,  total: 2100.00, status: true  },
-  { id: '4', number: 1004, cliente: 'Padaria Central',      date: '2024-03-14', itens: 2,  total: 310.00,  status: false },
-  { id: '5', number: 1005, cliente: 'Hotel Malanje',        date: '2024-03-13', itens: 12, total: 4800.00, status: true  },
-]
-
 function OrderCard({ order }: { order: Orders }) {
+
+  const { user } = useUserStore((state) => state)
+  const isClient = user?.role === PERMISSION.Client
+  const formattedDate = useFormatDate(order.date)
+
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-5 space-y-4">
@@ -40,12 +35,23 @@ function OrderCard({ order }: { order: Orders }) {
               <ShoppingCart size={18} className="text-yellow-600" />
             </div>
             <div>
-              <p className="font-semibold text-slate-800 leading-tight">{order.cliente}</p>
-              <p className="text-sm text-slate-400">#{order.number}</p>
+              <p className="font-semibold text-slate-800 leading-tight">{order.client?.name}</p>
+              {/* <p className="text-sm text-slate-400">#{order.number}</p> */}
             </div>
           </div>
-
+          {isClient  ?  (
           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="size-8 text-slate-400">
+                <MoreHorizontal size={16} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          ) :  (
+        <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="size-8 text-slate-400">
                 <MoreHorizontal size={16} />
@@ -58,6 +64,7 @@ function OrderCard({ order }: { order: Orders }) {
               <DropdownMenuItem variant="destructive">Remover</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          )}
         </div>
 
         {/* Status + Date */}
@@ -69,18 +76,17 @@ function OrderCard({ order }: { order: Orders }) {
           }>
             {order.status ? 'Concluído' : 'Pendente'}
           </Badge>
-          <span className="text-xs text-slate-400">{order.date}</span>
         </div>
 
         {/* Info */}
         <div className="space-y-2 pt-1 border-t border-slate-100">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Calendar size={14} className="text-slate-400 shrink-0" />
-            <span>{order.date}</span>
+            <span>{formattedDate}</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Package size={14} className="text-slate-400 shrink-0" />
-            <span>{order.itens} itens</span>
+            <span>{order.items.length} itens</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <CreditCard size={14} className="text-slate-400 shrink-0" />
@@ -95,7 +101,7 @@ function OrderCard({ order }: { order: Orders }) {
   )
 }
 
-export function OrdersGrid() {
+export function OrdersGrid({data : orders } :  Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {orders.map((order) => (

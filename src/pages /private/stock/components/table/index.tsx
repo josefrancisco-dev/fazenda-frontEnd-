@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -17,12 +17,16 @@ import {
 } from "@/components/ui/table"
 import { MoreHorizontalIcon } from "lucide-react"
 import type { Stock } from "@/types/typesApi"
+import { ActionOption } from "@/types/enums"
+import { useSelected } from "@/hooks/useSelected"
+import React from "react"
+import { StockSheetModal } from "../crud"
 
 interface Props {
   data : Stock[]
 }
 
-function TableStockRow({stock} : {stock :  Stock}) {
+function TableStockRow({stock, onAction} : {stock :  Stock, onAction :  (onAction :  Stock , action : ActionOption) => void}) {
   return (
     <TableRow key={stock.id}>
             <TableCell className="font-medium text-slate-700">
@@ -52,28 +56,48 @@ function TableStockRow({stock} : {stock :  Stock}) {
             </TableCell>
             <TableCell className="text-right">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="size-8">
-                    <MoreHorizontalIcon />
-                    <span className="sr-only">Abrir menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                  <DropdownMenuItem>Editar</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem variant="destructive">
-                    Remover
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="size-8">
+                  <MoreHorizontalIcon />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                  <DropdownMenuGroup className="cursor-pointer">
+                  {Object.entries(ActionOption).map(([value, label]) => (
+                    <DropdownMenuItem 
+                      key={value} 
+                      onClick={() => onAction(stock, label)} 
+                      className="cursor-pointer">
+                      {label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
             </TableCell>
     </TableRow>
   )
 }
 
 export function TableStock({data :  stock} : Props) {
+
+  const { active, close, onSelected, selected } = useSelected<Stock>()
+    const [action, setAction] = React.useState<ActionOption | null>(null)
+  
+     const handleSelection = (stock : Stock, action: ActionOption) => {
+      setAction(action)
+      onSelected(stock)
+    }
+  
+    const onClose = () => {
+      close()
+      setAction(null)
+    }
+    
+
   return (
+    <>
     <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
       <Table>
         <TableHeader>
@@ -92,10 +116,17 @@ export function TableStock({data :  stock} : Props) {
             < TableStockRow 
               key={stock.id}
               stock={stock}
+              onAction={handleSelection}
             />
           ))}
         </TableBody>
       </Table>
     </div>
+
+    {action && active && selected && (
+    <StockSheetModal action={action} stock={selected} controls={{ open: active, close: onClose }} />
+    )
+    }
+    </>
   )
 }

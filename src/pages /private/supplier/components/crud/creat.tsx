@@ -26,7 +26,7 @@ export function SheetCreateSupplier() {
      defaultValues :  {
         name:  "",
         role: "Supplier",
-        status:  "Customer",
+        status:  "Active",
         // date: "",
         company:  "",
         email: "",
@@ -42,7 +42,7 @@ export function SheetCreateSupplier() {
     })
     .catch((err) => console.log(err));
 
-    console.log("enviar dados :  ", data)
+    console.log("enviar dados do fornecedor :  ", data)
   } 
 
   return (
@@ -149,7 +149,7 @@ export function SheetCreateSupplier() {
             />
 
       
-            <Controller
+            {/* <Controller
               name="role"
               control={form.control}
               render={({ field, fieldState }) => (
@@ -169,7 +169,7 @@ export function SheetCreateSupplier() {
                   )}
                 </Field>
               )}
-            />
+            /> */}
 
 
             <Controller
@@ -194,7 +194,7 @@ export function SheetCreateSupplier() {
               )}
             />
 
-            <Controller
+            {/* <Controller
               name="status"
               control={form.control}
               render={({ field, fieldState }) => (
@@ -214,7 +214,7 @@ export function SheetCreateSupplier() {
                   )}
                 </Field>
               )}
-            />
+            /> */}
 
             <Controller
               name="avatar"
