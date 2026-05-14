@@ -12,6 +12,7 @@ import { NotFound } from "@/pages /public/notFound";
 import Auth from "@/app/layout /appAuth";
 import Acount from "@/pages /public/acount";
 import { AppPrivate } from "@/app/layout /appPrivate";
+import { CheckoutPage } from "@/pages /private/checout";
 
 export const router = createBrowserRouter([
   { path: '/home',   
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
         Component: Dashboard,
       },
       { path: 'clients',   Component: Clients   },
+      { path  : "/checkout/:id", Component :  CheckoutPage},
       { path: 'supplier',   Component: Supplier  },
       { path: 'products',   Component: Products  },
       { path: 'orders',   Component: Orders  },

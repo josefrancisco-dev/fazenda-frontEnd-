@@ -7,6 +7,8 @@ export function TabsClients() {
  
   const {data} = useGetAllOrders()
 
+  console.log("Dados dos pedidos :  ", data)
+
   return (
    <Tabs defaultValue="Visualizar por Lista">
       {/* Botões de navegação */}

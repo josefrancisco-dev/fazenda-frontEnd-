@@ -16,6 +16,6 @@ export const clientSchema = z.object({
 export type clientSchemaTDO = z.infer<typeof clientSchema>
 
 export const updateClientSchema = clientSchema.partial()
-.extend({id: z.string()})
+// .extend({id: z.string()})
 
 export type updateClientTDO = z.infer<typeof updateClientSchema>

@@ -1,5 +1,4 @@
 import type { Client } from '@/types/typesApi'
-// import type { User } from '@/types/userType'
 import { create } from 'zustand'
 
 type UserStore = {

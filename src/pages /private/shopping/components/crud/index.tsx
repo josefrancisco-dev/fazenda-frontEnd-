@@ -12,6 +12,7 @@ import { ActionOption } from "@/types/enums";
 import type { Shopping } from "@/types/typesApi";
 import { Button } from "@/components/ui/button";
 import { SheetUpdateSuplier } from "./update";
+import { Read } from "./read";
 
 type Props = {
   action: ActionOption;
@@ -45,7 +46,7 @@ export function ShoopingSheetModal({ action, shopping, controls }: Props) {
         </SheetHeader>
         <div className="">
           {isUpdate && <SheetUpdateSuplier shopping={shopping} onClose={controls.close} />}
-          {/* {isView && <Read client={client} />} */}
+          {isView && <Read shopping={shopping} />}
         </div>
     
         <SheetFooter>

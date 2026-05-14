@@ -1,4 +1,4 @@
-import { MoreHorizontal, Building2, Mail, Phone } from 'lucide-react'
+import { Building2, Mail, Phone, MoreHorizontalIcon } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -6,14 +6,20 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { Supplier } from '@/types/typesApi'
+import { ActionOption } from '@/types/enums'
+import { useSelected } from '@/hooks/useSelected'
+import React from 'react'
+import { SupplierSheetModal } from '../crud'
+import { usePagination } from '@/hooks/usePagination'
+import { PaginationControls } from '@/app/components/pagination'
 
 interface Props {
-  data :  Supplier[]
+  data: Supplier[]
 }
 
 const statusStyles: Record<Supplier['status'], string> = {
@@ -26,11 +32,10 @@ function getInitials(name: string) {
   return name.split(' ').map((n) => n[0]).join('').toUpperCase()
 }
 
-function ClientCard({ supplier }: { supplier: Supplier }) {
+function SupplierCard({ supplier, onAction }: { supplier: Supplier, onAction: (supplier: Supplier, action: ActionOption) => void }) {
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-5 space-y-4">
-        {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10">
@@ -44,29 +49,28 @@ function ClientCard({ supplier }: { supplier: Supplier }) {
               <p className="text-sm text-slate-400">{supplier.role}</p>
             </div>
           </div>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="size-8 text-slate-400">
-                <MoreHorizontal size={16} />
+              <Button variant="ghost" size="icon" className="size-8">
+                <MoreHorizontalIcon />
+                <span className="sr-only">Open menu</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-              <DropdownMenuItem>Editar</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive">Remover</DropdownMenuItem>
+              <DropdownMenuGroup className="cursor-pointer">
+                {Object.entries(ActionOption).map(([value, label]) => (
+                  <DropdownMenuItem key={value} onClick={() => onAction(supplier, label)} className="cursor-pointer">
+                    {label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-
-        {/* Status + Date */}
         <div className="flex items-center justify-between">
           <Badge className={statusStyles[supplier.status]}>{supplier.status}</Badge>
           <span className="text-xs text-slate-400">{supplier.date}</span>
         </div>
-
-        {/* Info */}
         <div className="space-y-2 pt-1 border-t border-slate-100">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Building2 size={14} className="text-slate-400 shrink-0" />
@@ -86,21 +90,56 @@ function ClientCard({ supplier }: { supplier: Supplier }) {
   )
 }
 
-export function ClientsGrid({data :  supplier}:  Props) {
+export function ClientsGrid({ data: supplier = [] }: Props) {
+  const { active, close, onSelected, selected } = useSelected<Supplier>()
+  const [action, setAction] = React.useState<ActionOption | null>(null)
 
-  const hasSupplier = supplier && supplier.length > 0;
+  const { currentPage, totalPages, paginatedData, nextPage, prevPage, goToPage } = usePagination({
+    data: supplier,
+    itemsPerPage: 6,
+  })
+
+  const handleSelection = (supplier: Supplier, action: ActionOption) => {
+    setAction(action)
+    onSelected(supplier)
+  }
+
+  const onClose = () => {
+    close()
+    setAction(null)
+  }
+
+  const hasSupplier = supplier.length > 0
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      { hasSupplier ?  (
-      supplier.map((supplier) => (
-        <ClientCard key={supplier.id} supplier={supplier} />
-      ))
-      ) : (
-           <div className="col-span-full text-center py-8 text-slate-500">
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {hasSupplier ? (
+          paginatedData.map((s) => (
+            <SupplierCard key={s.id} supplier={s} onAction={handleSelection} />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-8 text-slate-500">
             Nenhum fornecedor encontrado
           </div>
+        )}
+      </div>
+
+      {hasSupplier && (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+          onNext={nextPage}
+          onPrev={prevPage}
+          showTotalItems={true}
+          totalItems={supplier.length}
+        />
       )}
-    </div>
+
+      {active && selected && action && (
+        <SupplierSheetModal action={action} supplier={selected} controls={{ open: active, close: onClose }} />
+      )}
+    </>
   )
 }

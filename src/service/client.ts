@@ -21,9 +21,14 @@ class ClientService {
     return response.data
   }
 
-  async update(id: string, data: updateClientTDO): Promise<Client> {
-    const response = await this.api.put<Client>(`${this.route}/${id}`, data)
-    return response.data
+  // async update(id: string, data: updateClientTDO): Promise<Client> {
+  //   const response = await this.api.put<Client>(`${this.route}/${id}`, data)
+  //   return response.data
+  // }
+
+  async update(id: string, body: updateClientTDO): Promise<void> {
+    console.log("Body enviado para API:", JSON.stringify(body, null, 2))
+    await api.put(`${this.route}/${id}`, body)
   }
 
   async patch(id: string, data: updateClientTDO): Promise<Client> {

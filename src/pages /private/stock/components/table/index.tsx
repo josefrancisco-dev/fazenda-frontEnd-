@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-// import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +20,8 @@ import { ActionOption } from "@/types/enums"
 import { useSelected } from "@/hooks/useSelected"
 import React from "react"
 import { StockSheetModal } from "../crud"
+import { usePagination } from "@/hooks/usePagination"
+import { PaginationControls } from "@/app/components/pagination"
 
 interface Props {
   data : Stock[]
@@ -84,6 +85,18 @@ export function TableStock({data :  stock} : Props) {
 
   const { active, close, onSelected, selected } = useSelected<Stock>()
     const [action, setAction] = React.useState<ActionOption | null>(null)
+
+     const {
+        currentPage, 
+      totalPages, 
+      paginatedData,
+        nextPage,
+        prevPage, 
+        goToPage } = usePagination({
+        data: stock,
+        itemsPerPage: 5,
+      })
+        
   
      const handleSelection = (stock : Stock, action: ActionOption) => {
       setAction(action)
@@ -95,6 +108,7 @@ export function TableStock({data :  stock} : Props) {
       setAction(null)
     }
     
+    const hasStock = stock && stock.length > 0
 
   return (
     <>
@@ -111,17 +125,38 @@ export function TableStock({data :  stock} : Props) {
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {stock.map((stock) => (
-            < TableStockRow 
-              key={stock.id}
-              stock={stock}
-              onAction={handleSelection}
-            />
+        {hasStock ?  (
+          <TableBody>
+            {paginatedData.map((stock) => (
+              < TableStockRow 
+                key={stock.id}
+                stock={stock}
+                onAction={handleSelection}
+              />
           ))}
         </TableBody>
+        ) :  (
+        <TableRow>
+          <TableCell colSpan={7} className="text-center py-8 text-slate-500">
+            Nenhum estoque encontrado
+          </TableCell>
+        </TableRow>
+        )}
+        
       </Table>
     </div>
+
+    {hasStock && (
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={goToPage}
+        onNext={nextPage}
+        onPrev={prevPage}
+        showTotalItems={true}
+        totalItems={stock.length}
+      />
+    )}
 
     {action && active && selected && (
     <StockSheetModal action={action} stock={selected} controls={{ open: active, close: onClose }} />

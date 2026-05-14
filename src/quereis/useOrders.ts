@@ -3,20 +3,32 @@ import { ordersService } from "@/service/orders"
 import { useCart } from "@/hooks/useCart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
+
+import { useUserStore } from "@/stores/useUserStore"
 
 export const useGetAllOrders = () => {
-  return useQuery({
-    queryKey: ['orders'],
-    queryFn: () => ordersService.getAll(),
+  
+  const {user } = useUserStore((state) => state);
+
+    return useQuery({
+    queryKey: ["orders", user?.id],
+    queryFn: async () =>  {
+      const orders = await ordersService.getAll()
+      if (user?.role === 'Admin') return orders  
+      return orders.filter(order => order.clientId === user?.id)
+    },
+     enabled: !!user,
   })
 }
 
 export const useCreateOrders = () => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { items, clearCart } = useCart()   
   return useMutation({
     mutationKey: ['orders'],
-    mutationFn: () => {
+    mutationFn: async () => {
       const payload: orderResponseTDO = {
         number: Date.now(),               
         date:   new Date().toISOString(),
@@ -28,14 +40,16 @@ export const useCreateOrders = () => {
         }))
       }
 
-      return ordersService.create(payload)
+      const response = await ordersService.create(payload) 
+      return response.data
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       clearCart()                        
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       toast.success('Pedido feito com sucesso!', {
         action: { label: 'Fechar', onClick: () => toast.dismiss() }
       })
+     navigate(`/checkout/${data.id}`) 
     },
     onError: (error) => {
       console.log("erro : ", error)

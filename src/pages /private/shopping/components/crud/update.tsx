@@ -11,8 +11,8 @@ import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Spinner } from "@/components/ui/spinner"
-import {updateShoppingSchema, type shoppingTDO, type updateShoppingTDO } from "@/schemas/shopping"
-import { useCreateShopping } from "@/quereis/useShopping"
+import {updateShoppingSchema,  type updateShoppingTDO } from "@/schemas/shopping"
+import { useUpdateShopping } from "@/quereis/useShopping"
 import { Plus, Trash2 } from "lucide-react"
 import { useGetAllSupplier } from "@/quereis/useSupplier"
 import type { Shopping } from "@/types/typesApi"
@@ -20,7 +20,7 @@ import type { Shopping } from "@/types/typesApi"
 
 export function SheetUpdateSuplier({shopping, onClose }: {shopping :  Shopping, onClose :  VoidFunction}) {
 
-  const { mutateAsync, isPending } = useCreateShopping()
+  const { mutateAsync, isPending } = useUpdateShopping()
   const { data: suppliers } = useGetAllSupplier()
 
   const form = useForm<updateShoppingTDO>({
@@ -42,9 +42,12 @@ export function SheetUpdateSuplier({shopping, onClose }: {shopping :  Shopping, 
     (sum, item) => sum + (item.quantity || 0) * (item.price || 0), 0
   )
 
-  const onSubmit = (data: shoppingTDO) => {
-    mutateAsync(data)
-      .then(() => form.reset())
+  const onSubmit = (data: updateShoppingTDO) => {
+    mutateAsync({id : shopping.id, data})
+      .then(() => {
+       form.reset() 
+       onClose()
+      })
       .catch((err) => console.log(err))
   }
 
@@ -53,7 +56,7 @@ export function SheetUpdateSuplier({shopping, onClose }: {shopping :  Shopping, 
           <form
             className="space-y-4"
             id="form-rhf-demo"
-            // onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(onSubmit)}
           >
             {/* Fornecedor */}
             <Controller
@@ -188,7 +191,7 @@ export function SheetUpdateSuplier({shopping, onClose }: {shopping :  Shopping, 
             <div className="flex items-center justify-between rounded-lg bg-slate-50 px-4 py-3 border border-slate-200">
               <span className="text-sm text-slate-500">Total da compra</span>
               <span className="font-semibold text-slate-800">
-                {/* AO {total.toFixed(2).replace('.', ',')} */}
+              AO {(total ?? 0).toFixed(2).replace('.', ',')}
               </span>
             </div>
 

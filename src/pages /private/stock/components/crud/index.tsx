@@ -11,9 +11,9 @@ import { cn } from "@/lib/utils";
 
 import { ActionOption } from "@/types/enums";
 import type {Stock } from "@/types/typesApi";
-// import { Read } from "./read";
 import { Button } from "@/components/ui/button";
 import { SheetUpdateStock } from "./update";
+import { Read } from "./read";
 
 type Props = {
   action: ActionOption;
@@ -36,18 +36,18 @@ export function StockSheetModal({ action, stock, controls }: Props) {
       >
         <SheetHeader>
           <SheetTitle>
-            {isUpdate ? "Editar Stock" : "Detalhes do Stock"}
+            {isUpdate ? "Editar Stock" : "Detalhes do Estoque"}
           </SheetTitle>
           <SheetDescription>
             {isUpdate
               ? "Altere os dados do stock e clique em guardar."
-              : "Visualize os detalhes do client."
+              : "Visualize os detalhes do Estoque."
             }
           </SheetDescription>
         </SheetHeader>
         <div className="">
           {isUpdate && <SheetUpdateStock stock={stock} onClose={controls.close} />}
-          {/* {isView && <Read client={client} />} */}
+          {isView && <Read stock={stock} />}
         </div>
     
         <SheetFooter>

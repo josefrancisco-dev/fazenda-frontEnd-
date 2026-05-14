@@ -22,6 +22,8 @@ import { ActionOption } from "@/types/enums"
 import React from "react"
 import { useSelected } from "@/hooks/useSelected"
 import { SupplierSheetModal } from "../crud"
+import { usePagination } from "@/hooks/usePagination"
+import { PaginationControls } from "@/app/components/pagination"
 
 type Props = {
   data: Supplier[]
@@ -78,7 +80,7 @@ function ClientTableRow({supplier, onAction} :  {supplier : Supplier,  onAction:
             {supplier.date}
           </TableCell>
           <TableCell className="text-right">
-             <DropdownMenu>
+          <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="size-8">
                 <MoreHorizontalIcon />
@@ -107,6 +109,17 @@ export function TableSuppliers({data : supplier} : Props) {
 
     const { active, close, onSelected, selected } = useSelected<Supplier>()
     const [action, setAction] = React.useState<ActionOption | null>(null)
+
+    const { 
+      currentPage, 
+      totalPages, 
+      paginatedData,
+       nextPage,
+        prevPage, 
+        goToPage } = usePagination({
+        data: supplier,
+        itemsPerPage: 6,
+      })
   
      const handleSelection = (supplier : Supplier, action: ActionOption) => {
       setAction(action)
@@ -119,45 +132,60 @@ export function TableSuppliers({data : supplier} : Props) {
     }
     
   
-  const hasClients = supplier && supplier.length > 0
+  const hasSupplier = supplier && supplier.length > 0
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Representante</TableHead>
-            <TableHead>Empresa</TableHead>
-            <TableHead>NIF</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Telefone</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Data de Cadastro</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {hasClients ?  (
-            supplier?.map((supplier) => (
-              <ClientTableRow 
-               key={supplier.id}
-               supplier={supplier}
-               onAction={handleSelection}
-              />
-            ))
-          ) :  (
+    <>
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={8} className="text-center  py-8 text-slate-500">
-                Nenhum cliente encontrado
-              </TableCell>
+              <TableHead>Representante</TableHead>
+              <TableHead>Empresa</TableHead>
+              <TableHead>NIF</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Telefone</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Data de Cadastro</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {hasSupplier ? (
+              paginatedData?.map((supplier) => (
+                <ClientTableRow 
+                key={supplier.id}
+                supplier={supplier}
+                onAction={handleSelection}
+                />
+              ))
+            ) :  (
+              <TableRow>
+                <TableCell colSpan={8} className="text-center  py-8 text-slate-500">
+                  Nenhum cliente encontrado
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
-      {active && selected && action && (
-        <SupplierSheetModal action={action} supplier={selected} controls={{ open: active, close: onClose }} />
-       )}
-    </div>
+       {hasSupplier && (
+            <PaginationControls
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={goToPage}
+              onNext={nextPage}
+              onPrev={prevPage}
+              showTotalItems={true}
+              totalItems={supplier.length}
+            />
+          )}
+        
+        {active && selected && action && (
+          <SupplierSheetModal action={action} supplier={selected} controls={{ open: active, close: onClose }} />
+        )}
+    </>
+   
   )
 }

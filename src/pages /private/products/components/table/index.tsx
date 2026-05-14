@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { PERMISSION } from "@/constants/permitions"
+import { PERMISSION } from "@/constants/constants"
 import { useSelected } from "@/hooks/useSelected"
 import { CartCounterRow } from "@/pages /private/orders/components/crud/cartCounter"
 import { useUserStore } from "@/stores/useUserStore"
@@ -18,6 +18,8 @@ import type { Product } from "@/types/typesApi"
 import { MoreHorizontalIcon } from "lucide-react"
 import React from "react"
 import { ProductSheetModal } from "../crud"
+import { usePagination } from "@/hooks/usePagination"
+import { PaginationControls } from "@/app/components/pagination"
 
 
 interface Props {
@@ -111,6 +113,17 @@ export function TableProducts({data :  product}: Props) {
   
     const { active, close, onSelected, selected } = useSelected<Product>()
     const [action, setAction] = React.useState<ActionOption | null>(null)
+
+    const { 
+        currentPage, 
+        totalPages, 
+        paginatedData,
+          nextPage,
+          prevPage, 
+          goToPage } = usePagination({
+          data: product,
+          itemsPerPage: 10,
+        })
   
      const handleSelection = (product : Product, action: ActionOption) => {
       setAction(action)
@@ -125,42 +138,55 @@ export function TableProducts({data :  product}: Props) {
   const hasProduct = product && product.length > 0
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Produto</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead>Quantidade</TableHead>
-            <TableHead>Unidade</TableHead>
-            <TableHead>Preço</TableHead>
-            <TableHead>Estado</TableHead>
-            <TableHead className="text-center">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody> 
-          {hasProduct ? (
-            product.map((product) => (
-              <TableProductRow 
-                key={product.id}
-                product={product}
-                onAction={handleSelection}
-              />
-            ))
-          ) : (
+    <>
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={7} className="text-center text-slate-500 py-8">
-                Nenhum produto encontrado
-              </TableCell>
+              <TableHead>Produto</TableHead>
+              <TableHead>Categoria</TableHead>
+              <TableHead>Quantidade</TableHead>
+              <TableHead>Unidade</TableHead>
+              <TableHead>Preço</TableHead>
+              <TableHead>Estado</TableHead>
+              <TableHead className="text-center">Ações</TableHead>
             </TableRow>
-          )}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody> 
+            {hasProduct ? (
+              paginatedData.map((product) => (
+                <TableProductRow 
+                  key={product.id}
+                  product={product}
+                  onAction={handleSelection}
+                />
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center text-slate-500 py-8">
+                  Nenhum produto encontrado
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
+        {hasProduct && (
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+            onNext={nextPage}
+            onPrev={prevPage}
+            showTotalItems={true}
+            totalItems={product.length}
+          />
+        )}
 
-    {active && selected && action && (
-      <ProductSheetModal action={action} product={selected} controls={{ open: active, close: onClose }} />
-    )}
-    </div>
+        {active && selected && action && (
+          <ProductSheetModal action={action} product={selected} controls={{ open: active, close: onClose }} />
+        )}
+    </>
   )
 }

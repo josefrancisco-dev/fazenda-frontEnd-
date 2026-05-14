@@ -3,9 +3,8 @@ import {updateClientSchema,  type updateClientTDO } from "@/schemas/client"
 import {Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import {  useUpdateClient } from "@/quereis/useClient"
-// import { Spinner } from "@/components/ui/spinner"
-// import { FileDropzone } from "@/app/components/dropzone"
+import {  useUpdateClient} from "@/quereis/useClient"
+
 import type { Client } from "@/types/typesApi"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
@@ -14,12 +13,11 @@ import { Spinner } from "@/components/ui/spinner"
 
 export function SheetUpdateClient({client, onClose} :  {client :  Client, onClose :  VoidFunction }) {
   
-  const {mutateAsync, isPending} = useUpdateClient()
+  const {mutateAsync , isPending} = useUpdateClient()
 
   const form =  useForm({
     resolver : zodResolver(updateClientSchema),
      defaultValues :  {
-        id :  client.id,
         name:  client.name,
         role:  client.role,
         status:  client.status,
@@ -234,7 +232,8 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
             </Field>
           )}
         /> */}   
-      </form>     
+      </form>  
+         
       <Button
         type="submit" 
         form = "form-update"

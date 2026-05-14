@@ -42,6 +42,7 @@ export function SheetUpdateStock({stock, onClose} :  {stock :  Stock, onClose : 
 
     await mutateAsync(stockData)
     form.reset()
+    onClose()
   }
 
   return (

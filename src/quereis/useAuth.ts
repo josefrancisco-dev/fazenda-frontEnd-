@@ -58,7 +58,7 @@ export const useValidateQuery = () => {
         const clientData = await loginService.validate()
         return clientData
       } catch (err: any) {
-        console.error('❌ Erro na validação:', err)
+        console.error(' Erro na validação:', err)
         if (err.response?.status === 401) {
           tokenStorageServices.remove()
           toast.error('Sessão expirada. Por favor, inicie sessão novamente.')

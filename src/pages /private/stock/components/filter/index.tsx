@@ -1,6 +1,7 @@
-import { Search, Filter, Download } from 'lucide-react'
+import { Search, Filter} from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { ExportDropdownStock } from '../export/export'
 
 interface FilterBarProps {
   searchPlaceholder?: string
@@ -13,7 +14,6 @@ export function FilterBar({
   searchPlaceholder = 'Pesquisar...',
   onSearch,
   onFilter,
-  onExport,
 }: FilterBarProps) {
   return (
     <div className="flex items-center justify-between gap-3 w-full">
@@ -39,10 +39,7 @@ export function FilterBar({
             Filtrar
         </Button>
 
-        <Button variant="outline" onClick={onExport} className="gap-2">
-            <Download size={16} />
-            Exportar
-        </Button>
+        <ExportDropdownStock />
       </div>
     </div>
   )

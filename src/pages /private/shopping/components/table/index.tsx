@@ -21,6 +21,8 @@ import { ActionOption } from "@/types/enums"
 import { useSelected } from "@/hooks/useSelected"
 import React from "react"
 import { ShoopingSheetModal } from "../crud"
+import { usePagination } from "@/hooks/usePagination"
+import { PaginationControls } from "@/app/components/pagination"
 
 interface Props {
   data :  Shopping[]
@@ -78,6 +80,18 @@ export function TableShopping({data : shopping } :  Props) {
 
   const { active, close, onSelected, selected } = useSelected<Shopping>()
     const [action, setAction] = React.useState<ActionOption | null>(null)
+
+    const {
+       currentPage, 
+      totalPages, 
+      paginatedData,
+       nextPage,
+       prevPage, 
+       goToPage } = usePagination({
+        data: shopping,
+        itemsPerPage: 10,
+    })
+    
   
      const handleSelection = (shopping : Shopping, action: ActionOption) => {
       setAction(action)
@@ -90,33 +104,60 @@ export function TableShopping({data : shopping } :  Props) {
     }
     
 
-  return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Fornecedor</TableHead>
-            {/* <TableHead>Data</TableHead> */}
-            <TableHead>Itens</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {shopping.map((shopping) => (
-            <Row 
-              key={shopping.id}
-              shopping={shopping}
-              onAction={handleSelection}
-            />
-          ))}
-        </TableBody>
-      </Table>
+    const hasShopping = shopping && shopping.length > 0
 
-      {active && selected && action && (
-         <ShoopingSheetModal action={action} shopping={selected} controls={{ open: active, close: onClose }} />
-      )}
-    </div>
+  return (
+    <>
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Fornecedor</TableHead>
+              {/* <TableHead>Data</TableHead> */}
+              <TableHead>Itens</TableHead>
+              <TableHead>Total</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+
+          {hasShopping ? (
+          <TableBody>
+            {paginatedData.map((shopping) => (
+              <Row 
+                key={shopping.id}
+                shopping={shopping}
+                onAction={handleSelection}
+              />
+            ))}
+          </TableBody>
+          ) :  (
+          <TableRow>
+            <TableCell colSpan={5} className="text-center py-8 text-slate-500">
+              Nenhuma compra encontrada
+            </TableCell>
+          </TableRow>
+
+          )}
+        </Table>  
+      </div>
+
+      {hasShopping && (
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={goToPage}
+            onNext={nextPage}
+            onPrev={prevPage}
+            showTotalItems={true}
+            totalItems={shopping.length}
+          />
+        )}
+
+        {active && selected && action && (
+          <ShoopingSheetModal action={action} shopping={selected} controls={{ open: active, close: onClose }} />
+        )}
+    </>
+    
   )
 }

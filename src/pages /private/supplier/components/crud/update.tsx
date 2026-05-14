@@ -31,6 +31,7 @@ export function SheetUpdateSupllier({supplier, onClose} : {supplier :  Supplier,
     mutateAsync(data)
     .then(() => {
       form.reset()
+      onClose()
     })
     .catch((err) => console.log(err));
 

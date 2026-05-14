@@ -1,6 +1,8 @@
-  import { SheetCreateProduct } from "./components/crud/creat";
+  import { useUserStore } from "@/stores/useUserStore";
+import { SheetCreateProduct } from "./components/crud/creat";
   import { FilterBar } from "./components/filter";
   import { TabsClients } from "./components/tabs";
+import { PERMISSION } from "@/constants/constants";
 
   export const metadata = {
     title: 'Visão Geral - Fazenda Girassol',
@@ -8,6 +10,9 @@
   };
 
   export function Products() {
+   const { user } = useUserStore();
+   const userRole = user?.role  === PERMISSION.Admin;
+  
     return (
       <div className="p-4 md:p-8 space-y-8">
         {/* Header */}
@@ -15,7 +20,10 @@
           <div>
             <h1 className="text-3xl font-bold text-foreground">Produtos</h1>
           </div>
+
+          {userRole && (
           <SheetCreateProduct />
+           )}
         </div>
 
         <div >

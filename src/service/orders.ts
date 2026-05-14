@@ -17,8 +17,9 @@ async getAll(): Promise<Orders[]> {
   return response.data
 }
 
-create(data: orderResponseTDO): Promise<AxiosResponse<Orders>> {
-    return this.api.post<Orders>(this.route, data)
+async create(data: orderResponseTDO): Promise<AxiosResponse<Orders>> {
+    const response =  await this.api.post<Orders>(this.route, data)
+    return response 
   }
 
 update(id: string, data: orderResponseTDO): Promise<AxiosResponse<Orders>> {

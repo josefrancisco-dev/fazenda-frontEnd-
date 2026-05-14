@@ -15,6 +15,8 @@ import { ActionOption } from '@/types/enums'
 import React from 'react'
 import { useSelected } from '@/hooks/useSelected'
 import { ClientSheetModal } from '../crud'
+import { usePagination } from '@/hooks/usePagination'
+import { PaginationControls } from '@/app/components/pagination'
 
 type Props = {
   data: Client[]
@@ -33,11 +35,10 @@ function getInitials(name: string) {
   return name.split(' ').map((n) => n[0]).join('').toUpperCase()
 }
 
-function ClientCard({client, onAction} : {client : Client, onAction: (onAction: Client, action: ActionOption) => void }) {
+function ClientCard({ client, onAction }: { client: Client, onAction: (client: Client, action: ActionOption) => void }) {
   return (
     <Card className="hover:shadow-md transition-shadow">
       <CardContent className="p-5 space-y-4">
-        {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10">
@@ -51,7 +52,6 @@ function ClientCard({client, onAction} : {client : Client, onAction: (onAction: 
               <p className="text-sm text-slate-400">{client.role}</p>
             </div>
           </div>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="size-8">
@@ -60,12 +60,9 @@ function ClientCard({client, onAction} : {client : Client, onAction: (onAction: 
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuGroup className="cursor-pointer">
+              <DropdownMenuGroup className="cursor-pointer">
                 {Object.entries(ActionOption).map(([value, label]) => (
-                  <DropdownMenuItem 
-                    key={value} 
-                    onClick={() => onAction(client, label)} 
-                    className="cursor-pointer">
+                  <DropdownMenuItem key={value} onClick={() => onAction(client, label)} className="cursor-pointer">
                     {label}
                   </DropdownMenuItem>
                 ))}
@@ -73,12 +70,10 @@ function ClientCard({client, onAction} : {client : Client, onAction: (onAction: 
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-
         <div className="flex items-center justify-between">
           <Badge className={statusStyles[client.status]}>{client.status}</Badge>
           <span className="text-xs text-slate-400">{client.date}</span>
         </div>
-        
         <div className="space-y-2 pt-1 border-t border-slate-100">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Building2 size={14} className="text-slate-400 shrink-0" />
@@ -98,46 +93,62 @@ function ClientCard({client, onAction} : {client : Client, onAction: (onAction: 
   )
 }
 
-export function ClientsGrid({data : clients} :  Props) {
-
+export function ClientsGrid({ data: clients = [] }: Props) {
   const { active, close, onSelected, selected } = useSelected<Client>()
-    const [action, setAction] = React.useState<ActionOption | null>(null)
-  
-     const handleSelection = (client : Client, action: ActionOption) => {
-      setAction(action)
-      onSelected(client)
-    }
-  
-    const onClose = () => {
-      close()
-      setAction(null)
-    }
-    
+  const [action, setAction] = React.useState<ActionOption | null>(null)
 
-  const hasClients = clients && clients.length > 0
-  
+  const 
+  { currentPage,
+     totalPages,
+    paginatedData, 
+     nextPage, 
+     prevPage, 
+     goToPage } = usePagination({
+    data: clients,
+    itemsPerPage: 6,
+  })
+
+  const handleSelection = (client: Client, action: ActionOption) => {
+    setAction(action)
+    onSelected(client)
+  }
+
+  const onClose = () => {
+    close()
+    setAction(null)
+  }
+
+  const hasClients = clients.length > 0
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasClients ? (
-            clients.map((client) => (
-              <ClientCard
-              key={client.id} 
-              client={client}
-              onAction={handleSelection}
-                />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-8 text-slate-500">
-              Nenhum cliente encontrado
-            </div>
-          )
-        }
+          paginatedData.map((client) => (
+            <ClientCard key={client.id} client={client} onAction={handleSelection} />
+          ))
+        ) : (
+          <div className="col-span-full text-center py-8 text-slate-500">
+            Nenhum cliente encontrado
+          </div>
+        )}
       </div>
+
+      {hasClients && (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+          onNext={nextPage}
+          onPrev={prevPage}
+          showTotalItems={true}
+          totalItems={clients.length}
+        />
+      )}
 
       {active && selected && action && (
         <ClientSheetModal action={action} client={selected} controls={{ open: active, close: onClose }} />
       )}
-    </>    
+    </>
   )
 }

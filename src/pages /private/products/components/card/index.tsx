@@ -1,14 +1,13 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { MoreHorizontal, MoreHorizontalIcon } from 'lucide-react'
+import { MoreHorizontalIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { CartCounterCard } from '@/pages /private/orders/components/crud/cartCounter'
@@ -18,7 +17,8 @@ import { ProductSheetModal } from '../crud'
 import { useSelected } from '@/hooks/useSelected'
 import React from 'react'
 import type { Product } from '@/types/typesApi'
-
+import { usePagination } from '@/hooks/usePagination'
+import { PaginationControls } from '@/app/components/pagination'
 
 interface Props {
   data: Product[]
@@ -36,38 +36,29 @@ const stockConfigFallback = {
   progress: 0,
 }
 
-function ProductCard({ product, onAction }: { product: Product , onAction : (onAction: Product, action: ActionOption) => void  }) {
+function ProductCard({ product, onAction }: { product: Product, onAction: (product: Product, action: ActionOption) => void }) {
   const { user } = useUserStore((state) => state)
   const isAdmin = user?.role === 'Admin'
   const config = stockConfig[product.stock] ?? stockConfigFallback
 
   return (
     <Card className="hover:shadow-lg transition-all duration-300 group overflow-hidden p-0">
-      {/* Banner */}
       <div className={`relative h-36 bg-gradient-to-br ${product.banner} flex items-center justify-center`}>
         {product.image ? (
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover absolute inset-0"
-          />
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover absolute inset-0" />
         ) : (
           <span className="text-7xl drop-shadow-lg group-hover:scale-110 transition-transform duration-300">
             {product.emoji}
           </span>
         )}
-
-        {/* Categoria */}
         <div className="absolute top-3 left-3">
           <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full">
             {product.category}
           </span>
         </div>
-
-        {/* Menu */}
         <div className="absolute top-2 right-2">
           {isAdmin && (
-             <DropdownMenu>
+            <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="size-8">
                   <MoreHorizontalIcon />
@@ -75,36 +66,29 @@ function ProductCard({ product, onAction }: { product: Product , onAction : (onA
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                  <DropdownMenuGroup className="cursor-pointer">
+                <DropdownMenuGroup className="cursor-pointer">
                   {Object.entries(ActionOption).map(([value, label]) => (
-                    <DropdownMenuItem 
-                      key={value} 
-                      onClick={() => onAction(product, label)} 
-                      className="cursor-pointer">
+                    <DropdownMenuItem key={value} onClick={() => onAction(product, label)} className="cursor-pointer">
                       {label}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
-          </DropdownMenu>
+            </DropdownMenu>
           )}
         </div>
       </div>
-
       <CardContent className="p-5 space-y-4">
-        {/* Nome */}
         <div className="flex justify-between">
           <h3 className="font-bold text-slate-800 text-base">{product.name}</h3>
           <CartCounterCard product={{
             id:    product.id,
             name:  product.name,
-            image: product.image, 
+            image: product.image,
             emoji: product.emoji,
             price: product.price,
           }} />
         </div>
-
-        {/* Quantidade e Preço */}
         <div className="flex items-end justify-between">
           <div>
             <p className="text-xs text-slate-400 mb-1">Quantidade</p>
@@ -120,8 +104,6 @@ function ProductCard({ product, onAction }: { product: Product , onAction : (onA
             </p>
           </div>
         </div>
-
-        {/* Estoque */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <p className="text-xs text-slate-400">Estoque</p>
@@ -136,32 +118,39 @@ function ProductCard({ product, onAction }: { product: Product , onAction : (onA
   )
 }
 
-export function ProductsGrid({ data }: Props) {
+export function ProductsGrid({ data = [] }: Props) {
+  const { active, close, onSelected, selected } = useSelected<Product>()
+  const [action, setAction] = React.useState<ActionOption | null>(null)
 
-   const { active, close, onSelected, selected } = useSelected<Product>()
-      const [action, setAction] = React.useState<ActionOption | null>(null)
-    
-       const handleSelection = (product : Product, action: ActionOption) => {
-        setAction(action)
-        onSelected(product)
-      }
-    
-      const onClose = () => {
-        close()
-        setAction(null)
-      }
-  const hasProduct = data && data.length > 0
+  const { 
+    currentPage,
+     totalPages, 
+     paginatedData, 
+     nextPage, 
+     prevPage, 
+     goToPage } = usePagination({
+    data,
+    itemsPerPage: 6,
+  })
+
+  const handleSelection = (product: Product, action: ActionOption) => {
+    setAction(action)
+    onSelected(product)
+  }
+
+  const onClose = () => {
+    close()
+    setAction(null)
+  }
+
+  const hasProduct = data.length > 0
 
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {hasProduct ? (
-          data.map((product) => (
-            <ProductCard 
-            key={product.id}
-            product={product} 
-            onAction={handleSelection}
-            />
+          paginatedData.map((product) => (
+            <ProductCard key={product.id} product={product} onAction={handleSelection} />
           ))
         ) : (
           <p className="text-slate-500 col-span-3 text-center py-8">
@@ -170,10 +159,21 @@ export function ProductsGrid({ data }: Props) {
         )}
       </div>
 
+      {hasProduct && (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={goToPage}
+          onNext={nextPage}
+          onPrev={prevPage}
+          showTotalItems={true}
+          totalItems={data.length}
+        />
+      )}
+
       {active && selected && action && (
         <ProductSheetModal action={action} product={selected} controls={{ open: active, close: onClose }} />
-       )}
+      )}
     </>
-    
   )
 }
