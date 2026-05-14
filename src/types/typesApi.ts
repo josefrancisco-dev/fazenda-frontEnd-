@@ -24,7 +24,6 @@ export interface Client {
   avatar?: string
 }
 
-// interface certa
 export interface Product {
   id:       string
   name:     string

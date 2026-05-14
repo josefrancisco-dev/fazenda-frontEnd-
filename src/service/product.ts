@@ -12,18 +12,12 @@ class ProductService {
     this.route = "/products"
   }
 
-  // async getAll(): Promise<Product[]> {
-  //   const response = await this.api.get<Product[]>(this.route)
-  //   return response.data
-  // }
-
   async getAll(): Promise<Product[]> {
   const response = await this.api.get<Product[]>(this.route)
 
   const products = await Promise.all(
     response.data.map(async (product) => {
       if (!product.image) return product
-
       try {
         const imgResponse = await this.api.get(product.image, { 
           responseType: "blob",
