@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
 import {
   Sheet,
   SheetClose,
@@ -18,7 +17,6 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { useCreateClient } from "@/quereis/useClient"
 import { Spinner } from "@/components/ui/spinner"
 import { FileDropzone } from "@/app/components/dropzone"
-// import { FileDropzone } from "@/app/components/dropzone"
 
 export function SheetCreateClient() {
   

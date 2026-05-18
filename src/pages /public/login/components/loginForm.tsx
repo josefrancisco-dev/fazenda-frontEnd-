@@ -37,7 +37,6 @@ export function LoginForm() {
         </div>
       )}
 
-      {/* EMAIL */}
       <div className="space-y-2">
         <label className="text-sm font-medium">Email</label>
         <div className="relative">
@@ -52,7 +51,6 @@ export function LoginForm() {
         </div>
       </div>
 
-      {/* PASSWORD */}
       <div className="space-y-2">
         <label className="text-sm font-medium">Senha</label>
 
@@ -77,7 +75,6 @@ export function LoginForm() {
         </div>
       </div>
 
-      {/* BUTTON */}
       <Button
         type="submit"
         disabled={isPending}

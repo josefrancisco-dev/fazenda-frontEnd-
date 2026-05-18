@@ -1,150 +1,163 @@
 import { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Building, Phone } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Building, Phone, User, ShieldHalf } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { clientSchema, type clientSchemaTDO } from '@/schemas/client'
+import { useCreateClient } from '@/quereis/useClient'
+import { Spinner } from '@/components/ui/spinner'
+import { useNavigate } from 'react-router-dom'
 
-export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [phone, setPhone] = useState('')
-  const [name, setName] = useState('')
-
-
+export function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const { mutateAsync, isPending } = useCreateClient()
+  const navigate = useNavigate()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
 
-    try {
-      // Simular chamada API
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      
-      if (!email || !password) {
-        setError('Por favor, preencha todos os campos')
-        return
-      }
-
-      if (!email.includes('@')) {
-        setError('Email inválido')
-        return
-      }
-
-      console.log('Login com:', { email, password })
-      // Aqui você faria a chamada real para a API
-    } finally {
-      setIsLoading(false)
+  const form = useForm<clientSchemaTDO>({
+    resolver: zodResolver(clientSchema),
+    defaultValues: {
+      name: "",
+      role: "Client",
+      status: "Active",
+      company: "",
+      email: "",
+      phone: "",
+      nif: "",
+      password: "",
     }
+  })
+
+  const onSubmit = (data: clientSchemaTDO) => {
+    mutateAsync(data)
+      .then(() => {
+        form.reset()
+        navigate('/')
+      })
+      .catch((err) => {
+        if (err?.response?.status === 400) {
+          form.setError("email", {
+            type: "manual",
+            message: err.response.data.message,
+          })
+        }
+      })
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      {error && (
-        <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
-          {error}
-        </div>
-      )}
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
 
-      <div className="space-y-2">
-        <label htmlFor="name" className="block text-sm font-medium text-foreground">
-          Entidade
-        </label>
-        <div className="relative">
-          <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-          <input
-            id="name"
-            type="text"
-            placeholder="Empresa X"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label htmlFor="phone" className="block text-sm font-medium text-foreground">
-          Telefone
-        </label>
-        <div className="relative">
-          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-          <input
-            id="phone"
-            type="text"
-            placeholder="+244 9xx xxx xxx"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          />
-        </div>
-      </div>
-
-      {/* Email Field */}
-      <div className="space-y-2">
-        <label htmlFor="email" className="block text-sm font-medium text-foreground">
-          Email
-        </label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-          <input
-            id="email"
-            type="email"
-            placeholder="seu.email@exemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          />
-        </div>
-      </div>
-
-      {/* Password Field */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label htmlFor="password" className="block text-sm font-medium text-foreground">
-            Senha
-          </label>
-        </div>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-          <input
-            id="password"
-            type={showPassword ? 'text' : 'password'}
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full pl-10 pr-10 py-2.5 rounded-lg border border-input bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {showPassword ? (
-              <EyeOff className="w-5 h-5 text-yellow-600" />
-            ) : (
-              <Eye className="w-5 h-5 text-yellow-600" />
-            )}
-          </button>
-        </div>
-      </div>
-
-     
-      {/* Submit Button */}
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full text-primary-foreground font-semibold rounded-lg  disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-      >
-        {isLoading ? (
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-4 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-            <span>Entrando...</span>
-          </div>
-        ) : (
-          'Entrar'
+      <Controller
+        name="company"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="company">Entidade</FieldLabel>
+            <div className="relative">
+              <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input {...field} id="company" placeholder="Empresa" autoComplete="off" className="pl-10" />
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
         )}
+      />
+
+      <Controller
+        name="nif"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="nif">NIF</FieldLabel>
+            <div className="relative">
+              <ShieldHalf className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input {...field} id="nif" placeholder="NIF" autoComplete="off" className="pl-10" />
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="name"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="name">Nome</FieldLabel>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input {...field} id="name" placeholder="Representante" autoComplete="off" className="pl-10" />
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="phone"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="phone">Telefone</FieldLabel>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input {...field} id="phone" placeholder="+244 9xx xxx xxx" autoComplete="off" className="pl-10" />
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="email"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input {...field} id="email" type="email" placeholder="seu.email@exemplo.com" autoComplete="off" className="pl-10" />
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="password"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="password">Senha</FieldLabel>
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input
+                {...field}
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                autoComplete="off"
+                className="pl-10 pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword
+                  ? <EyeOff className="w-5 h-5 text-yellow-600" />
+                  : <Eye className="w-5 h-5 text-yellow-600" />
+                }
+              </button>
+            </div>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Button type="submit" disabled={isPending} className="w-full">
+        {isPending ? <Spinner /> : 'Entrar'}
       </Button>
     </form>
   )
