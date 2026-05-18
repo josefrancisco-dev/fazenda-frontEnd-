@@ -1,14 +1,15 @@
 import type { supplierSchemaTDO, updateSupplierTDO } from "@/schemas/supplier"
 import { supplierService } from "@/service/suppliers"
+import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 
-export const useGetAllSupplier = () => {
+export const useGetAllSupplier = (params?: GetParams) => {
    return useQuery({
-    queryKey: ['supplier'],
+    queryKey: ['supplier', params],
     queryFn: async () => {
-      const response = await supplierService.getAll()
+      const response = await supplierService.getAll(params)
       return response
     },
    })

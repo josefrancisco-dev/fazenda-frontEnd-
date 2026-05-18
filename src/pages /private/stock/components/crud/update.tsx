@@ -7,14 +7,14 @@ import { Spinner } from "@/components/ui/spinner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { stockSchema, type StockTDO, type CreateStockRequest } from "@/schemas/stock"
 import { useCreateStock } from "@/quereis/useStock"
-import { useGetAllProduct } from "@/quereis/useProduct"
+import { useGetAllProducts } from "@/quereis/useProduct"
 import type { Stock } from "@/types/typesApi"
 
 
 
 export function SheetUpdateStock({stock, onClose} :  {stock :  Stock, onClose :  VoidFunction })  {
   const { mutateAsync, isPending } = useCreateStock()
-  const { data: products, isLoading: productsLoading } = useGetAllProduct() 
+  const { data: products, isLoading: productsLoading } = useGetAllProducts() 
 
   const form = useForm<StockTDO>({
     resolver: zodResolver(stockSchema),
@@ -22,7 +22,7 @@ export function SheetUpdateStock({stock, onClose} :  {stock :  Stock, onClose : 
       quantity: stock.quantity,
       productId: String(stock.productId),
     }
-  })
+  }) 
 
   const onSubmit = async (data: StockTDO) => {
     const selectedProduct = products?.find(p => p.id === data.productId)

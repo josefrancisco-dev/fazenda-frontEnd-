@@ -38,8 +38,14 @@ export function SheetCreateProduct() {
     .then(() => {
       form.reset()
     })
-    .catch((err) => console.log(err));
-
+    .catch((err) => {
+      if (err?.response?.status === 400) {
+        form.setError("name", {
+          type: "manual",
+          message: err.response.data.message, 
+        })
+      }
+    })
   } 
 
   return (

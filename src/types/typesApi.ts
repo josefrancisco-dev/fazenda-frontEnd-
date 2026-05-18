@@ -104,3 +104,8 @@ export interface OrderItem {
 export type AuthToken = {
   token: string;
 };
+
+
+export interface GetParams {
+  q?: string; 
+}

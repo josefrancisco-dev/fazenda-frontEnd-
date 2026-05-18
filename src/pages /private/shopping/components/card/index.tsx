@@ -32,10 +32,10 @@ function ShoppingCard({ shopping, onAction }: { shopping: Shopping, onAction: (s
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-slate-200 text-slate-700 font-semibold text-sm flex items-center justify-center shrink-0">
-              {getInitials(shopping.supplier?.name)}
+              {getInitials(shopping.supplier?.company)}
             </div>
             <div>
-              <p className="font-semibold text-slate-800 leading-tight">{shopping.supplier?.name}</p>
+              <p className="font-semibold text-slate-800 leading-tight">{shopping.supplier?.company}</p>
             </div>
           </div>
           <DropdownMenu>

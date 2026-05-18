@@ -1,6 +1,6 @@
 import { api } from "@/api"
 import type { clientSchemaTDO, updateClientTDO } from "@/schemas/client"
-import type { Client } from "@/types/typesApi"
+import type { Client, GetParams } from "@/types/typesApi"
 
 class ClientService {
   private api
@@ -11,8 +11,10 @@ class ClientService {
     this.route = "/clients"
   }
 
-  async getAll(): Promise<Client[]> {
-    const response = await this.api.get<Client[]>(this.route)
+  async getAll(params?:GetParams): Promise<Client[]> {
+    const response = await this.api.get<Client[]>(this.route, {
+      params
+    })
     return response.data
   }
 
@@ -21,14 +23,9 @@ class ClientService {
     return response.data
   }
 
-  // async update(id: string, data: updateClientTDO): Promise<Client> {
-  //   const response = await this.api.put<Client>(`${this.route}/${id}`, data)
-  //   return response.data
-  // }
-
-  async update(id: string, body: updateClientTDO): Promise<void> {
-    console.log("Body enviado para API:", JSON.stringify(body, null, 2))
-    await api.put(`${this.route}/${id}`, body)
+  async update(id: string, data: updateClientTDO): Promise<Client> {
+    const response = await this.api.put<Client>(`${this.route}/${id}`, data)
+    return response.data
   }
 
   async patch(id: string, data: updateClientTDO): Promise<Client> {

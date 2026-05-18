@@ -32,26 +32,6 @@ export function ExportDropdownStock() {
   const [isOpenExportPDF, setOpenExportPdf] = React.useState(false);
 
   const { data} = useStockPrint();
-  console.log("Dados do pdf", data)
-
-  //   if (type === ExportTypes.PDF) {
-  //     try {
-  //       setOpenExportPdf(true);
-  //       startTransition(() => {
-  //         generatePDF(
-  //           <PrintStockDetails data={data ?? []} />,
-  //           pdfName("Estoque")
-  //         );
-  //       });
-  //       toast.success("PDF exportado com sucesso!");
-  //     } catch (error) {
-  //       console.error("Erro ao exportar PDF:", error);
-  //       toast.error("Erro ao exportar PDF");
-  //     } finally {
-  //       setOpenExportPdf(false);
-  //     }
-  //   }
-  // };
 
 const handleExport = async (type: ExportType) => {
   if (type === ExportTypes.PDF) {

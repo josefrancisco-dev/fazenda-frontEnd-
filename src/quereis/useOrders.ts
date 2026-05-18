@@ -6,15 +6,16 @@ import { toast } from "sonner"
 import { useNavigate } from "react-router-dom"
 
 import { useUserStore } from "@/stores/useUserStore"
+import type { GetParams } from "@/types/typesApi"
 
-export const useGetAllOrders = () => {
+export const useGetAllOrders = (params?: GetParams) => {
   
   const {user } = useUserStore((state) => state);
 
-    return useQuery({
-    queryKey: ["orders", user?.id],
+    return useQuery({ 
+    queryKey: ["orders", user?.id, params],
     queryFn: async () =>  {
-      const orders = await ordersService.getAll()
+      const orders = await ordersService.getAll(params)
       if (user?.role === 'Admin') return orders  
       return orders.filter(order => order.clientId === user?.id)
     },

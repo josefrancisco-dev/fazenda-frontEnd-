@@ -1,11 +1,18 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TableProducts } from "../table"
 import { ProductsGrid } from "../card"
-import { useGetAllProduct } from "@/quereis/useProduct"
+import { useSearchQuery } from "@/hooks/useSearchQuery"
+import { useDebounce } from "@/hooks/useDeBounce"
+import { useGetAllProducts} from "@/quereis/useProduct"
 
 export function TabsClients() {
-  
-  const {data} = useGetAllProduct()
+
+  const {value} = useSearchQuery('q') 
+  const debouncedSearch = useDebounce(value, 400)   
+
+  const {data} = useGetAllProducts(
+  debouncedSearch ? { q: debouncedSearch } : undefined
+  )
 
   return (
    <Tabs defaultValue="Visualizar por Grade">

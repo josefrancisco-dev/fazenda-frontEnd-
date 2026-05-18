@@ -1,14 +1,15 @@
 import type { shoppingTDO, updateShoppingTDO } from "@/schemas/shopping"
 import { shoppingService } from "@/service/shopping"
+import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 
-export const useGetAllShopping = () => {
+export const useGetAllShopping = (params?: GetParams) => {
    return useQuery({
-    queryKey: ['shopping'],
+    queryKey: ['shopping', params],
     queryFn: async () => {
-      const response = await shoppingService.getAll()
+      const response = await shoppingService.getAll(params)
       return response
     },
    })

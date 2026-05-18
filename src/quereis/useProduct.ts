@@ -1,18 +1,21 @@
 import type { ProductTDO } from "@/schemas/product"
 import { productService } from "@/service/product"
+import type { GetParams } from "@/types/typesApi"
+// import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 
-export const useGetAllProduct = () => {
-   return useQuery({
-    queryKey: ['product'],
+export const useGetAllProducts = (params?: GetParams) =>
+  useQuery({
+    queryKey: ['product', params],
     queryFn: async () => {
-      const response = await productService.getAll()
+      const response = await productService.getAll(params)
       return response
     },
-   })
-}
+    placeholderData: (previousData) => previousData,
+  })
+
 
 export const  useCreateProduct  =  () => {
  const queryClient = useQueryClient()

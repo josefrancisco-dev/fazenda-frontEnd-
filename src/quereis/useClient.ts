@@ -1,15 +1,16 @@
 import type { clientSchemaTDO, updateClientTDO} from "@/schemas/client"
 import { clientService } from "@/service/client"
+import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 const CLIENT_KEY = ['client'] as const
 
-export const useGetAllClient = () => {
+export const useGetAllClient = (params?: GetParams) => {
    return useQuery({
-    queryKey: CLIENT_KEY,
+    queryKey: ['client', params],
     queryFn: async () => {
-      const response = await clientService.getAll()
+      const response = await clientService.getAll(params)
       return response
     },
    })

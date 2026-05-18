@@ -2,10 +2,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TableSuppliers } from "../table"
 import { ClientsGrid } from "../card"
 import { useGetAllSupplier } from "@/quereis/useSupplier"
+import { useSearchQuery } from "@/hooks/useSearchQuery"
+import { useDebounce } from "@/hooks/useDeBounce"
 
 export function TabsClients() {
 
-  const {data} = useGetAllSupplier()
+  const {value} = useSearchQuery("q")
+  const debouncedSearch = useDebounce(value, 400)
+ 
+  const {data} = useGetAllSupplier(
+    debouncedSearch ?  {q : debouncedSearch } :  undefined
+  )
 
   return (
    <Tabs defaultValue="Visualizar por Lista">

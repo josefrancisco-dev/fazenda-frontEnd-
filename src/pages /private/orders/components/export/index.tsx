@@ -26,6 +26,7 @@ function StatusBadge({ status }: { status: boolean }) {
 }
 
 export function PrintStockDetails({ data: orders }: Props) {
+  
   return (
     <Document>
       <Page size="A4" style={S.page}>
@@ -45,7 +46,7 @@ export function PrintStockDetails({ data: orders }: Props) {
           <View style={S.tableHeaderAccent}>
             <Text style={[S.tableHeaderCell, { width: '25%' }]}>Cliente</Text>
             <Text style={[S.tableHeaderCell, { width: '25%' }]}>Itens</Text>
-            <Text style={[S.tableHeaderCell, { width: '25%' }]}>Quantidade</Text>
+            <Text style={[S.tableHeaderCell, { width: '25%' }]}>Estado</Text>
             <Text style={[S.tableHeaderCell, { width: '25%' }]}>Data de Cadastro</Text>
 
           </View>

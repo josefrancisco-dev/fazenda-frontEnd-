@@ -1,6 +1,6 @@
 import { api } from "@/api";
 import type { supplierSchemaTDO, updateSupplierTDO } from "@/schemas/supplier";
-import type {Supplier } from "@/types/typesApi";
+import type {GetParams, Supplier } from "@/types/typesApi";
 import type { AxiosResponse } from "axios";
 
 class SupplierService {
@@ -12,8 +12,10 @@ class SupplierService {
      this.route = "/suppliers" 
   }
   
-async getAll(): Promise<Supplier[]> {
-  const response = await this.api.get<Supplier[]>(this.route)
+async getAll(params?: GetParams): Promise<Supplier[]> {
+  const response = await this.api.get<Supplier[]>(this.route, {
+  params
+  })
   return response.data
 }
 

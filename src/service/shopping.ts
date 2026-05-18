@@ -1,6 +1,6 @@
 import { api } from "@/api";
 import type { shoppingTDO, updateShoppingTDO } from "@/schemas/shopping";
-import type {Shopping} from "@/types/typesApi";
+import type {GetParams, Shopping} from "@/types/typesApi";
 import type { AxiosResponse } from "axios";
 
 class ShoppingService {
@@ -12,8 +12,10 @@ class ShoppingService {
      this.route = "/shopping" 
   }
   
-async getAll(): Promise<Shopping[]> {
-  const response = await this.api.get<Shopping[]>(this.route)
+async getAll(params?: GetParams): Promise<Shopping[]> {
+  const response = await this.api.get<Shopping[]>(this.route, {
+    params
+  })
   return response.data
 }
 

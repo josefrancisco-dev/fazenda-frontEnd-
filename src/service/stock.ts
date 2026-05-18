@@ -1,6 +1,6 @@
 import { api } from "@/api"
 import type { StockTDO } from "@/schemas/stock"
-import type { Stock } from "@/types/typesApi"
+import type { GetParams, Stock } from "@/types/typesApi"
 import type { AxiosResponse } from "axios"
 
 
@@ -15,8 +15,10 @@ class StockService {
        this.route = "/stock" 
     }
 
-    async getAll(): Promise<Stock[]> {
-      const response = await this.api.get<Stock[]>(this.route)
+    async getAll(params?:GetParams): Promise<Stock[]> {
+      const response = await this.api.get<Stock[]>(this.route , {
+        params
+      })
       return response.data
     }
     

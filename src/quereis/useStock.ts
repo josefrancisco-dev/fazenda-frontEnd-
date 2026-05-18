@@ -1,15 +1,15 @@
 import type { CreateStockRequest} from "@/schemas/stock"
 import { stockService } from "@/service/stock"
+import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
 
-export const useGetAllStock  = () => {
-
+export const useGetAllStock  = (params?:GetParams) => {
    return useQuery ({
-     queryKey:  ['stock'],
+     queryKey:  ['stock', params],
      queryFn :  async () => {
-        const response = await stockService.getAll()
+        const response = await stockService.getAll(params)
         return response
      },
    }) 

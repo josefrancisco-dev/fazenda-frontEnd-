@@ -17,11 +17,11 @@ import { Spinner } from "@/components/ui/spinner"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { stockSchema, type StockTDO, type CreateStockRequest } from "@/schemas/stock"
 import { useCreateStock } from "@/quereis/useStock"
-import { useGetAllProduct } from "@/quereis/useProduct"
+import { useGetAllProducts } from "@/quereis/useProduct"
 
 export function SheetCreateStock() {
   const { mutateAsync, isPending } = useCreateStock()
-  const { data: products, isLoading: productsLoading } = useGetAllProduct() 
+  const { data: products, isLoading: productsLoading } = useGetAllProducts() 
 
   const form = useForm<StockTDO>({
     resolver: zodResolver(stockSchema),
