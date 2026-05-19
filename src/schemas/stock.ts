@@ -7,14 +7,16 @@ export const stockSchema = z.object({
 
 export type StockTDO = z.infer<typeof stockSchema>
 
+
+export const updateStockSchema = stockSchema.partial().extend({
+  value_Total: z.number().optional(),
+})
+export type updateStockTDO = z.infer<typeof updateStockSchema>
+
+
 export type CreateStockRequest = {
   quantity: number
   productId: string
   value_Total: number
 }
 
-export const updateStockSchema = stockSchema.partial().extend({
-  id: z.string(),
-})
-
-export type updateStockTDO = z.infer<typeof updateStockSchema>

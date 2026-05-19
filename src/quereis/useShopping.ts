@@ -43,19 +43,19 @@ export const  useUpdateShopping  =  () => {
  const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ['client'],
+    mutationKey: ['shopping'],
     mutationFn: async ({id , data} :  {id: string, data: updateShoppingTDO}) => {
       const response = await shoppingService.update(id , data)
       return response
     },
     onSuccess: async () => {
-      toast.success('Cliente criado com sucesso !', {
+      toast.success('Compra actualizada com sucesso !', {
         action: {
           label: 'Fechar',
           onClick: () => toast.dismiss(),
         },
       })
-      queryClient.invalidateQueries({ queryKey: ['client'] })
+      queryClient.invalidateQueries({ queryKey: ['shopping'] })
     },
     onError: () => {
       toast.error('Alguma coisa deu errado !')

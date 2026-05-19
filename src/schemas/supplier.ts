@@ -14,8 +14,6 @@ export const supplierSchema = z.object({
 
 export type supplierSchemaTDO = z.infer<typeof supplierSchema>
 
-export const updateSupplierSchema = supplierSchema.partial().extend({
-  id: z.string(), 
-})
+export const updateSupplierSchema = supplierSchema.partial()
 
 export type updateSupplierTDO = z.infer<typeof updateSupplierSchema>

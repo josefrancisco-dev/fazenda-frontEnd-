@@ -1,10 +1,11 @@
-import type { ProductTDO } from "@/schemas/product"
+import type { ProductTDO, updateProductTDO } from "@/schemas/product"
 import { productService } from "@/service/product"
 import type { GetParams } from "@/types/typesApi"
 // import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
+const CLIENT_KEY = ['product'] as const
 
 export const useGetAllProducts = (params?: GetParams) =>
   useQuery({
@@ -41,26 +42,26 @@ export const  useCreateProduct  =  () => {
   })
 }
 
-// export const  useUpdateClient  =  () => {
-//  const queryClient = useQueryClient()
+export const  useUpdateProduct  =  () => {
+ const queryClient = useQueryClient()
 
-//   return useMutation({
-//     mutationKey: ['client'],
-//     mutationFn: async ({id , data} :  {id: string, data: updateClientTDO}) => {
-//       const response = await clientService.update({id , data})
-//       return response
-//     },
-//     onSuccess: async () => {
-//       toast.success('Cliente criado com sucesso !', {
-//         action: {
-//           label: 'Fechar',
-//           onClick: () => toast.dismiss(),
-//         },
-//       })
-//       queryClient.invalidateQueries({ queryKey: ['client'] })
-//     },
-//     onError: () => {
-//       toast.error('Alguma coisa deu errado !')
-//     },
-//   })
-// }
+  return useMutation({
+    mutationKey: CLIENT_KEY,
+    mutationFn: async ({id , data} :  {id: string, data: updateProductTDO}) => {
+      const response = await productService.update(id , data)
+      return response
+    },
+    onSuccess: async () => {
+      toast.success('Cliente criado com sucesso !', {
+        action: {
+          label: 'Fechar',
+          onClick: () => toast.dismiss(),
+        },
+      })
+      queryClient.invalidateQueries({ queryKey: CLIENT_KEY })
+    },
+    onError: () => {
+      toast.error('Alguma coisa deu errado !')
+    },
+  })
+}

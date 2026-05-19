@@ -196,8 +196,8 @@ export function SheetUpdateSuplier({shopping, onClose }: {shopping :  Shopping, 
             </div>
 
           <Button 
-          // type="submit" 
-          // form="form-rhf-demo"
+          type="submit" 
+          form="form-rhf-demo"
           className="w-full"
           >
             {isPending ? <Spinner /> : "Cadastrar"}

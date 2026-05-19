@@ -3,18 +3,18 @@ import {updateClientSchema,  type updateClientTDO } from "@/schemas/client"
 import {Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import {  useUpdateClient} from "@/quereis/useClient"
 
 import type { Client } from "@/types/typesApi"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import { toast } from "sonner"
+import { useUpdateClient} from "@/quereis/useClient"
 
 
 export function SheetUpdateClient({client, onClose} :  {client :  Client, onClose :  VoidFunction }) {
   
-  const {mutateAsync , isPending} = useUpdateClient()
-
+ const {mutateAsync , isPending} = useUpdateClient()
   const form =  useForm({
     resolver : zodResolver(updateClientSchema),
      defaultValues :  {
@@ -23,7 +23,7 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
         status:  client.status,
         // date : "",
         company:  client.company,
-        email: client.email,
+        email: client.email, 
         phone:  client.phone,
         nif: client.nif,
         password :  client.password
@@ -31,15 +31,16 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
   })
 
   const onSubmit = (data : updateClientTDO) => {
-
-   console.log("Dados a serem eviados para ser actualizados :  ", data)
-
     mutateAsync({id : client.id , data})
     .then(() => {
       form.reset()
       onClose()
     })
-    .catch((err) => console.log(err));
+     .catch((err) => {
+      if (err?.response?.status === 404) {
+        toast.error('Cliente não encontrado!')
+      }
+    })
   } 
 
   return (

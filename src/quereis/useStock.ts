@@ -1,4 +1,4 @@
-import type { CreateStockRequest} from "@/schemas/stock"
+import type { CreateStockRequest, updateStockTDO} from "@/schemas/stock"
 import { stockService } from "@/service/stock"
 import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -24,6 +24,31 @@ export const useCreateStock  = () => {
         mutationKey : ['stock'],
         mutationFn : async (data : CreateStockRequest) => {
           const response = await stockService.create(data)
+          return response
+        }, 
+        onSuccess: async () => {
+      toast.success('Product criado com sucesso !', {
+        action: {
+          label: 'Fechar',
+          onClick: () => toast.dismiss(),
+        },
+      })
+      queryClient.invalidateQueries({ queryKey: ['stock'] })
+    },
+    onError: () => {
+      toast.error('Alguma coisa deu errado !')
+    },
+    })
+}
+
+export const useUpdateStock  = () => {
+
+   const queryClient = useQueryClient()
+
+    return useMutation ({
+        mutationKey : ['stock'],
+        mutationFn : async ({id , data} : {id :  string , data : updateStockTDO}) => {
+          const response = await stockService.update(id, data)
           return response
         }, 
         onSuccess: async () => {

@@ -4,6 +4,7 @@ import type { GetParams } from "@/types/typesApi"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 
+const CLIENT_KEY = ['supplier'] as const
 
 export const useGetAllSupplier = (params?: GetParams) => {
    return useQuery({
@@ -43,7 +44,7 @@ export const  useUpdateSupplier  =  () => {
  const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: ['client'],
+    mutationKey: CLIENT_KEY,
     mutationFn: async ({id , data} :  {id: string, data: updateSupplierTDO}) => {
       const response = await supplierService.update(id , data)
       return response
@@ -55,7 +56,31 @@ export const  useUpdateSupplier  =  () => {
           onClick: () => toast.dismiss(),
         },
       })
-      queryClient.invalidateQueries({ queryKey: ['client'] })
+      queryClient.invalidateQueries({ queryKey: CLIENT_KEY })
+    },
+    onError: () => {
+      toast.error('Alguma coisa deu errado !')
+    },
+  })
+}
+
+export const  usePatchSupplier  =  () => {
+ const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: CLIENT_KEY,
+    mutationFn: async ({id , data} :  {id: string, data: updateSupplierTDO}) => {
+      const response = await supplierService.update(id , data)
+      return response
+    },
+    onSuccess: async () => {
+      toast.success('Fornecedor criado com sucesso !', {
+        action: {
+          label: 'Fechar',
+          onClick: () => toast.dismiss(),
+        },
+      })
+      queryClient.invalidateQueries({ queryKey: CLIENT_KEY})
     },
     onError: () => {
       toast.error('Alguma coisa deu errado !')

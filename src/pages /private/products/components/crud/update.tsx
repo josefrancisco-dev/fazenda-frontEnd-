@@ -4,8 +4,8 @@ import {Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Spinner } from "@/components/ui/spinner"
-import { productSchema, type ProductTDO } from "@/schemas/product"
-import { useCreateProduct } from "@/quereis/useProduct"
+import {updateProductSchema, type updateProductTDO } from "@/schemas/product"
+import {  useUpdateProduct } from "@/quereis/useProduct"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FileDropzone } from "@/app/components/dropzone"
 import type { Product } from "@/types/typesApi"
@@ -13,10 +13,10 @@ import type { Product } from "@/types/typesApi"
 
 export function SheetUpdateProduct({product, onClose} :  {product :  Product, onClose : VoidFunction}) {
   
-  const {mutateAsync, isPending} = useCreateProduct()
+  const {mutateAsync, isPending} = useUpdateProduct()
 
   const form =  useForm({
-    resolver : zodResolver(productSchema),
+    resolver : zodResolver(updateProductSchema),
      defaultValues :  {
         name:  product.name,
         category: product.category,
@@ -25,8 +25,8 @@ export function SheetUpdateProduct({product, onClose} :  {product :  Product, on
      }
   })
 
-  const onSubmit = (data : ProductTDO) => {
-    mutateAsync(data)
+  const onSubmit = (data : updateProductTDO) => {
+    mutateAsync({id : product.id , data})
     .then(() => {
       form.reset()
       onClose()

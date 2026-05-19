@@ -23,9 +23,17 @@ create(data: supplierSchemaTDO): Promise<AxiosResponse<Supplier>> {
     return this.api.post<Supplier>(this.route, data)
   }
 
-update(id: string, data: updateSupplierTDO): Promise<AxiosResponse<Supplier>> {
-    return this.api.put<Supplier>(`${this.route}/${id}`, data)
+async update(id: string, data: updateSupplierTDO): Promise<Supplier> {
+    const response = await this.api.put<Supplier>(`${this.route}/${id}`, data)
+    return response.data
   }
+
+async patch(id: string, data: updateSupplierTDO): Promise<Supplier> {
+    const response = await this.api.put<Supplier>(`${this.route}/${id}`, data)
+    return response.data
+  }
+
 }
+
 
 export const supplierService = new SupplierService()

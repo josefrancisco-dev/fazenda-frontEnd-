@@ -24,7 +24,7 @@ export function SheetCreateStock() {
   const { data: products, isLoading: productsLoading } = useGetAllProducts() 
 
   const form = useForm<StockTDO>({
-    resolver: zodResolver(stockSchema),
+    resolver: zodResolver(stockSchema), 
     defaultValues: {
       quantity: 0,
       productId: "",

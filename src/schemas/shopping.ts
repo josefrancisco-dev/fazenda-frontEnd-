@@ -14,8 +14,6 @@ export const shoppingSchema = z.object({
 
 export type shoppingTDO = z.infer<typeof shoppingSchema>
 
-export const updateShoppingSchema = shoppingSchema.partial().extend({
-  id: z.string(),
-})
+export const updateShoppingSchema = shoppingSchema.partial()
 
 export type updateShoppingTDO = z.infer<typeof updateShoppingSchema>

@@ -13,6 +13,7 @@ import Auth from "@/app/layout /appAuth";
 import Acount from "@/pages /public/acount";
 import { AppPrivate } from "@/app/layout /appPrivate";
 import { CheckoutPage } from "@/pages /private/checout";
+import { ProfilePage } from "@/pages /private/profile";
 
 export const router = createBrowserRouter([
   { path: '/home',   
@@ -37,6 +38,7 @@ export const router = createBrowserRouter([
         path: "dashboard",
         Component: Dashboard,
       },
+      { path: 'profile',   Component: ProfilePage},
       { path: 'clients',   Component: Clients   },
       { path  : "/checkout/:id", Component :  CheckoutPage},
       { path: 'supplier',   Component: Supplier  },

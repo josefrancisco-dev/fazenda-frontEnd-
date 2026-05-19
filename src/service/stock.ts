@@ -1,5 +1,5 @@
 import { api } from "@/api"
-import type { StockTDO } from "@/schemas/stock"
+import type { StockTDO, updateStockTDO } from "@/schemas/stock"
 import type { GetParams, Stock } from "@/types/typesApi"
 import type { AxiosResponse } from "axios"
 
@@ -26,7 +26,7 @@ class StockService {
         return this.api.post<Stock>(this.route, data)
       }
     
-    update(id: string, data: StockTDO): Promise<AxiosResponse<Stock>> {
+    update(id: string, data: updateStockTDO): Promise<AxiosResponse<Stock>> {
         return this.api.put<Stock>(`${this.route}/${id}`, data)
       }
 }

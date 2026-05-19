@@ -18,7 +18,7 @@ import { useCreateSupplier } from "@/quereis/useSupplier"
 import { supplierSchema, type supplierSchemaTDO } from "@/schemas/supplier"
 
 export function SheetCreateSupplier() {
-  
+
   const {mutateAsync, isPending} = useCreateSupplier()
 
   const form =  useForm({
@@ -41,8 +41,6 @@ export function SheetCreateSupplier() {
       form.reset()
     })
     .catch((err) => console.log(err));
-
-    console.log("enviar dados do fornecedor :  ", data)
   } 
 
   return (
@@ -60,6 +58,7 @@ export function SheetCreateSupplier() {
 
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
           <form className="space-y-4" id = "form-rhf-demo"  onSubmit={form.handleSubmit(onSubmit)}>    
+            
             <Controller
               name="company"
               control={form.control}
@@ -126,51 +125,27 @@ export function SheetCreateSupplier() {
               )}
             />
 
-              <Controller
-              name="name"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">
-                     Representante 
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="name"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Representante"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-      
-            {/* <Controller
-              name="role"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="frole">
-                     Cargo 
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="role"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Cargo"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            /> */}
-
+            <Controller
+            name="name"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="name">
+                    Representante 
+                </FieldLabel>
+                <Input
+                  {...field}
+                  id="name"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Representante"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
 
             <Controller
               name="phone"
@@ -194,27 +169,6 @@ export function SheetCreateSupplier() {
               )}
             />
 
-            {/* <Controller
-              name="status"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="status">
-                     Estado 
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="status"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Estado"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            /> */}
 
             <Controller
               name="avatar"

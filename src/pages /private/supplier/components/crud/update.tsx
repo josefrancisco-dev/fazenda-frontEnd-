@@ -4,14 +4,14 @@ import {Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Spinner } from "@/components/ui/spinner"
-import { useCreateSupplier } from "@/quereis/useSupplier"
+import {useUpdateSupplier } from "@/quereis/useSupplier"
 import { supplierSchema, type supplierSchemaTDO } from "@/schemas/supplier"
 import type { Supplier } from "@/types/typesApi"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 export function SheetUpdateSupllier({supplier, onClose} : {supplier :  Supplier, onClose :  VoidFunction }) {
   
-  const {mutateAsync, isPending} = useCreateSupplier()
+  const {mutateAsync, isPending} = useUpdateSupplier()
 
   const form =  useForm({
     resolver : zodResolver(supplierSchema),
@@ -28,15 +28,13 @@ export function SheetUpdateSupllier({supplier, onClose} : {supplier :  Supplier,
   })
 
   const onSubmit = (data : supplierSchemaTDO) => {
-    mutateAsync(data)
+    mutateAsync({id : supplier.id, data})
     .then(() => {
       form.reset()
       onClose()
     })
     .catch((err) => console.log(err));
-
-    console.log("enviar dados :  ", data)
-  } 
+   } 
 
   return (
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
