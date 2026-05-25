@@ -1,11 +1,24 @@
-import {Leaf } from 'lucide-react'
+import { Leaf } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
+import loginBg from '@/assets/login.jpg'
 
 export default function Auth() {
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      <div className="hidden md:flex flex-col justify-between p-8 bg-gradient-to-br from-yellow-500 via-yellow-600 to-slate-800 border-r border-slate-700">
-        <div className="flex items-center gap-3">
+      <div className="hidden md:flex flex-col justify-between p-8 relative border-r border-slate-700 overflow-hidden">
+
+        {/* Imagem de fundo */}
+        <img
+          src={loginBg}
+          alt="Campo agrícola"
+          className="absolute inset-0 w-full h-full object-cover object-center"
+        />
+
+        {/* Overlay escuro simples sem gradiente */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Logo */}
+        <div className="relative z-10 flex items-center gap-3">
           <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center font-bold text-white text-sm">
             <Leaf className="w-6 h-6 text-white" />
           </div>
@@ -15,7 +28,8 @@ export default function Auth() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        {/* Hero + Features */}
+        <div className="relative z-10 space-y-6">
           <div>
             <h2 className="text-4xl font-bold text-white mb-4">
               Gerencie suas vendas com eficiência
@@ -60,7 +74,8 @@ export default function Auth() {
           </div>
         </div>
 
-        <p className="text-xs text-yellow-100/60">
+        {/* Footer */}
+        <p className="relative z-10 text-xs text-white/50">
           © 2026 Girassol. Todos os direitos reservados.
         </p>
       </div>
