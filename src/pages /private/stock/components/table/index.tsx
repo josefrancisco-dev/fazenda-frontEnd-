@@ -57,25 +57,25 @@ function TableStockRow({stock, onAction} : {stock :  Stock, onAction :  (onActio
             </TableCell>
             <TableCell className="text-right">
               <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="size-8">
-                  <MoreHorizontalIcon />
-                  <span className="sr-only">Open menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                  <DropdownMenuGroup className="cursor-pointer">
-                  {Object.entries(ActionOption).map(([value, label]) => (
-                    <DropdownMenuItem 
-                      key={value} 
-                      onClick={() => onAction(stock, label)} 
-                      className="cursor-pointer">
-                      {label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="size-8">
+                    <MoreHorizontalIcon />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuGroup className="cursor-pointer">
+                    {Object.entries(ActionOption).map(([value, label]) => (
+                      <DropdownMenuItem 
+                        key={value} 
+                        onClick={() => onAction(stock, label)} 
+                        className="cursor-pointer">
+                        {label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </TableCell>
     </TableRow>
   )
@@ -84,10 +84,10 @@ function TableStockRow({stock, onAction} : {stock :  Stock, onAction :  (onActio
 export function TableStock({data :  stock} : Props) {
 
   const { active, close, onSelected, selected } = useSelected<Stock>()
-    const [action, setAction] = React.useState<ActionOption | null>(null)
+  const [action, setAction] = React.useState<ActionOption | null>(null)
 
      const {
-        currentPage, 
+      currentPage, 
       totalPages, 
       paginatedData,
         nextPage,

@@ -58,7 +58,6 @@ export function StockSheetModal({ action, stock, controls }: Props) {
                 {isPending ? <Spinner />: "Cadastrar" }
             </Button>
             } */}
-         
           <SheetClose asChild>
             <Button variant="outline">Sair</Button>
           </SheetClose>

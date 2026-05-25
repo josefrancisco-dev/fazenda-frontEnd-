@@ -39,7 +39,9 @@ export function TabsClients() {
       </TabsContent>
 
       <TabsContent value="Visualizar por Grade" className="mt-4 cursor-pointer">
-        <StockGrid/>
+        <StockGrid
+         data = {data ??  []}
+        />
       </TabsContent>
     </Tabs>
   )
