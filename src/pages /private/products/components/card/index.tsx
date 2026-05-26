@@ -53,7 +53,7 @@ function ProductCard({ product, onAction }: { product: Product, onAction: (produ
         )}
         <div className="absolute top-3 left-3">
           <span className="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full">
-            {product.category}
+            {product.category?.name}
           </span>
         </div>
         <div className="absolute top-2 right-2">

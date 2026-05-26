@@ -62,7 +62,7 @@ export function PrintStockDetails({ data: product }: Props) {
                 {product.name ?? 'N/A'}
               </Text>
               <Text style={[S.cellMuted, { width: '18%' }]}>
-                {product.category.name ?? 'N/A'}
+                {product.category ?? 'N/A'}
               </Text>
               <Text style={[S.cell, { width: '15%' }]}>
                 {product.quantity ?? 'N/A'} 

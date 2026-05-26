@@ -54,7 +54,7 @@ return(
           </div>
         </TableCell>
         <TableCell className="text-slate-500">
-          {product.category}
+          {product.category?.name}
         </TableCell>
        <TableCell className="text-slate-700">
           {product.quantity || <span>0</span>}

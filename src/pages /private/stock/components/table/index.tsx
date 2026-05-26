@@ -34,7 +34,7 @@ function TableStockRow({stock, onAction} : {stock :  Stock, onAction :  (onActio
               {stock.product?.name}
             </TableCell>
             <TableCell className="text-slate-500">
-              {stock.product?.category}
+              {stock.product?.category?.name}
             </TableCell>
             <TableCell className="text-slate-700">
               {stock.quantity} {stock.product?.unit}

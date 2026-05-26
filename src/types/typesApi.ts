@@ -4,6 +4,13 @@ export type Role    = 'Client' | 'Supplier' | 'Admin'
 
 export type StatuStocks = 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
 
+export interface Category {
+  id: string
+  name: string
+  description?: string | null
+  createdAt: string
+}
+
 export interface Login {
   email:  string 
   password:  string
@@ -27,7 +34,7 @@ export interface Client {
 export interface Product {
   id:       string
   name:     string
-  category: string
+  category: Category
   quantity: number   
   unit:     string
   price:    number   

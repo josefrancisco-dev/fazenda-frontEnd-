@@ -38,7 +38,7 @@ class ProductService {
   create(data: ProductTDO): Promise<AxiosResponse<Product>> {
     const formData = new FormData()
     formData.append("name",     data.name)
-    formData.append("category", data.category)
+    formData.append("categoryId", data.categoryId)
     formData.append("unit", data.unit)
     formData.append("price",    String(data.price))
     formData.append("banner",   data.banner)
@@ -53,7 +53,7 @@ class ProductService {
   update(id: string, data: updateProductTDO): Promise<AxiosResponse<Product>> {
     const formData = new FormData()
     if (data.name)     formData.append("name",     data.name)
-    if (data.category) formData.append("category", data.category)
+    if (data.categoryId) formData.append("categoryId", data.categoryId)
     if (data.unit) formData.append("unit", data.unit)
     if (data.price)    formData.append("price",    String(data.price))
     if (data.banner)   formData.append("banner",   data.banner)

@@ -2,25 +2,12 @@
 import { Document, Page, Text, View} from '@react-pdf/renderer';
 import { HeaderReport } from '@/app/layout /pdf/header';
 import { brand, S } from '@/app/layout /pdf';
+import type {Stock} from '@/types/typesApi';
 
-
-type StockItem = {
-  id: string;
-  quantity: number;
-  value_Total: number;
-  status: 'Em_Estoque' | 'Estoque_Medio' | 'Estoque_Baixo';
-  product?: {
-    name: string;
-    category: string;
-    unit: string;
-    price: number;
-  };
-};
 
 type Props = {
-  data: StockItem[];
+  data: Stock[];
 };
-
 
 const statusConfig = {
   Em_Estoque:    { bg: brand.greenBg,  text: brand.greenText,  label: 'Em Estoque' },
@@ -28,7 +15,7 @@ const statusConfig = {
   Estoque_Baixo: { bg: brand.redBg,    text: brand.redText,    label: 'Baixo'      },
 }
 
-function StatusBadge({ status }: { status: StockItem['status'] }) {
+function StatusBadge({ status }: { status: Stock['status'] }) {
   const config = statusConfig[status] ?? statusConfig['Estoque_Baixo']
   return (
     <View style={[S.badge, { backgroundColor: config.bg }]}>
@@ -92,7 +79,7 @@ export function PrintStockDetails({ data: stocks }: Props) {
                 {stock.product?.name ?? 'N/A'}
               </Text>
               <Text style={[S.cellMuted, { width: '18%' }]}>
-                {stock.product?.category ?? 'N/A'}
+                {stock.product?.category?.name ?? 'N/A'}
               </Text>
               <Text style={[S.cell, { width: '14%' }]}>
                 {stock.quantity} {stock.product?.unit ?? ''}

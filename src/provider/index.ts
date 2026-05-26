@@ -14,6 +14,7 @@ import Acount from "@/pages /public/acount";
 import { AppPrivate } from "@/app/layout /appPrivate";
 import { CheckoutPage } from "@/pages /private/checout";
 import { ProfilePage } from "@/pages /private/profile";
+import { Categories } from "@/pages /private/categories";
 
 export const router = createBrowserRouter([
   { path: '/home',   
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
       },
       { path: 'profile',   Component: ProfilePage},
       { path: 'clients',   Component: Clients   },
+      {path :  'categories' , Component :  Categories},
       { path  : "/checkout/:id", Component :  CheckoutPage},
       { path: 'supplier',   Component: Supplier  },
       { path: 'products',   Component: Products  },

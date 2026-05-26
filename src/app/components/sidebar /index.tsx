@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BarChart3, Package, ShoppingCart, Truck, Boxes, Users, User, Leaf } from 'lucide-react';
+import { Menu, X, BarChart3, Package, ShoppingCart, Truck, Boxes, Users, User, Leaf, ClipboardList } from 'lucide-react';
 import type { Role } from '@/types/typesApi';
 import { useUserStore } from '@/stores/useUserStore';
 
@@ -14,6 +14,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { path: '/dashboard', label: 'Visão Geral',  icon: BarChart3 , allowed: ['Admin', 'Client']},
   { path: '/clients',   label: 'Clientes',     icon: User,        allowed: ['Admin'] },
+  { path: '/categories',   label: 'Categorias', icon: ClipboardList,        allowed: ['Admin'] },
   { path: '/supplier',  label: 'Fornecedores', icon: Users,       allowed: ['Admin', 'Supplier'] },
   { path: '/products',  label: 'Produtos',     icon: Package, allowed: ['Admin', 'Client'] },
   { path: '/orders',    label: 'Pedidos',      icon: ShoppingCart, allowed: ['Admin', 'Client'] },

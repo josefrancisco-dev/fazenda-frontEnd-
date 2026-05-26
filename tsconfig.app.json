@@ -30,5 +30,5 @@
         ]
       }
   },
-  "include": ["src"]
+  "include": ["src", "@/components/ui/textarea.tsx"]
 }
