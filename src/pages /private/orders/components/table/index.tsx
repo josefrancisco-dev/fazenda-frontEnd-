@@ -24,12 +24,15 @@ import React from "react"
 import { OrdersSheetModal } from "../crud"
 import { usePagination } from "@/hooks/usePagination"
 import { PaginationControls } from "@/app/components/pagination"
+import { statusConfig } from "@/constants/statusConfig"
+
 
 interface Props {
   data: Orders[]
 }
 
-function TableProductRow({
+
+function TableOrderRow({
   orders,
   onAction,
 }: {
@@ -37,6 +40,7 @@ function TableProductRow({
   onAction: (orders: Orders, action: ActionOptionView) => void
 }) {
   const formattedDate = useFormatDate(orders.date)
+  const config = statusConfig[orders.status]
 
   return (
     <TableRow key={orders.id}>
@@ -45,13 +49,9 @@ function TableProductRow({
       <TableCell>
         <Badge
           variant="secondary"
-          className={
-            orders.status
-              ? "bg-green-100 text-green-700 hover:bg-green-100"
-              : "bg-red-100 text-red-700 hover:bg-red-100"
-          }
+          className={config?.badgeClass}
         >
-          {orders.status ? "Concluído" : "Pendente"}
+          {config?.label ?? orders.status}
         </Badge>
       </TableCell>
       <TableCell>{formattedDate}</TableCell>
@@ -82,7 +82,8 @@ function TableProductRow({
   )
 }
 
-export function TableProducts({ data: orders }: Props) {
+
+export function TableOrders({ data: orders }: Props) {
   const { active, close, onSelected, selected } = useSelected<Orders>()
   const [action, setAction] = React.useState<ActionOptionView | null>(null)
 
@@ -123,11 +124,11 @@ export function TableProducts({ data: orders }: Props) {
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
-          
+
           <TableBody>
             {hasOrders ? (
               paginatedData.map((order) => (
-                <TableProductRow
+                <TableOrderRow
                   key={order.id}
                   orders={order}
                   onAction={handleSelection}
@@ -135,7 +136,10 @@ export function TableProducts({ data: orders }: Props) {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-slate-500">
+                <TableCell
+                  colSpan={5}
+                  className="text-center py-8 text-slate-500"
+                >
                   Nenhum pedido encontrado
                 </TableCell>
               </TableRow>

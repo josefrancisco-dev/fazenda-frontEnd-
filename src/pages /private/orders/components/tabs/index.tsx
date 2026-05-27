@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { TableProducts } from "../table"
+import { TableOrders } from "../table"
 import { OrdersGrid } from "../card"
 import { useGetAllOrders } from "@/quereis/useOrders"
 import { useSearchQuery } from "@/hooks/useSearchQuery"
@@ -15,7 +15,6 @@ export function TabsClients() {
 
   return (
    <Tabs defaultValue="Visualizar por Lista">
-      {/* Botões de navegação */}
       <TabsList variant="line">
         <TabsTrigger 
          value="Visualizar por Lista"
@@ -31,9 +30,8 @@ export function TabsClients() {
         </TabsTrigger>
       </TabsList>
 
-      {/* Conteúdo de cada tab */}
       <TabsContent value="Visualizar por Lista" className="mt-4 cursor-pointer">
-        <TableProducts 
+        <TableOrders 
          data = {data ?? []}
         />
       </TabsContent>

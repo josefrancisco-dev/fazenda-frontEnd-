@@ -26,8 +26,6 @@ export function SheetCreateProduct() {
   const {mutateAsync, isPending} = useCreateProduct()
 
 
-  console.log("Dados da categoria :  ", categories )
-
   const form =  useForm({
     resolver : zodResolver(productSchema),
      defaultValues :  {
@@ -129,7 +127,7 @@ export function SheetCreateProduct() {
                     )}
                   </Field>
                 )}
-              />  
+            />  
               
               <Controller
                 name="unit"

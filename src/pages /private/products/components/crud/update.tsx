@@ -9,17 +9,19 @@ import {  useUpdateProduct } from "@/quereis/useProduct"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { FileDropzone } from "@/app/components/dropzone"
 import type { Product } from "@/types/typesApi"
+import { useGetAllCategory } from "@/quereis/useCategories"
 
 
 export function SheetUpdateProduct({product, onClose} :  {product :  Product, onClose : VoidFunction}) {
   
+  const { data: categories } =  useGetAllCategory()
   const {mutateAsync, isPending} = useUpdateProduct()
 
   const form =  useForm({
     resolver : zodResolver(updateProductSchema),
      defaultValues :  {
         name:  product.name,
-        category: product.category,
+        categoryId: product.category.id,
         price :  product.price,
         unit :  product.unit,  
      }
@@ -61,29 +63,46 @@ export function SheetUpdateProduct({product, onClose} :  {product :  Product, on
               )}
             />
 
-            <Controller
-                name="category"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="category">Categoria</FieldLabel>
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger id="category" aria-invalid={fieldState.invalid}>
-                        <SelectValue placeholder="Selecione uma categoria" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Grãos">Grãos</SelectItem>
-                        <SelectItem value="Frutas">Frutas</SelectItem>
-                        <SelectItem value="Verduras">Verduras</SelectItem>
-                        <SelectItem value="Legumes">Legumes</SelectItem>
-                        <SelectItem value="Carnes">Carnes</SelectItem>
-                        <SelectItem value="Laticínios">Laticínios</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
+              <Controller
+                  name="categoryId"
+                  control={form.control}
+
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="categoryId">
+                        Categoria
+                      </FieldLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger
+                          id="categoryId"
+                          aria-invalid={fieldState.invalid}
+                        >
+                          <SelectValue placeholder="Selecione uma categoria" />
+                        </SelectTrigger>
+
+                        <SelectContent>
+
+                          {categories?.map((category) => (
+                            <SelectItem
+                              key={category.id}
+                              value={category.id}
+                            >
+                              {category.name}
+                            </SelectItem>
+                          ))}
+
+                        </SelectContent>
+                      </Select>
+
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+              />  
               
               <Controller
                 name="unit"

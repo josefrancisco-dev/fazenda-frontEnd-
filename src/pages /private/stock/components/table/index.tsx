@@ -45,16 +45,6 @@ function TableStockRow({stock, onAction} : {stock :  Stock, onAction :  (onActio
             <TableCell className="font-medium text-slate-800">
               AO {stock.value_Total.toFixed(2).replace('.', ',')}
             </TableCell>
-            <TableCell>
-            {stock.status}
-              {/* <Badge className={
-                stock.status
-                  ? 'bg-green-100 text-green-700 hover:bg-green-100'
-                  : 'bg-red-100 text-red-700 hover:bg-red-100'
-              }>
-                {stock.status ? 'Em Estoque' : 'Estoque Baixo'}
-              </Badge> */}
-            </TableCell>
             <TableCell className="text-right">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -121,7 +111,6 @@ export function TableStock({data :  stock} : Props) {
             <TableHead>Quantidade</TableHead>
             <TableHead>Preço Unit.</TableHead>
             <TableHead>Valor Total</TableHead>
-            <TableHead>Status</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>

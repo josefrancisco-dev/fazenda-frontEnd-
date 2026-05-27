@@ -1,18 +1,37 @@
 import { useFormatDate } from "@/hooks/useFormatDate"
 import type { Orders } from "@/types/typesApi"
-import { Box, CalendarDays, User, Wallet, Package } from "lucide-react"
+import { Box, CalendarDays, User, Wallet, Package, Pencil } from "lucide-react"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { orderStatusSchema } from "@/schemas/orders"
+import type z from "zod"
+import { StatusDialog } from "./update"
+import { statusConfig } from "@/constants/statusConfig"
+
+type OrderStatus = z.infer<typeof orderStatusSchema>
+
+function OrderStatusBadge({ status }: { status: OrderStatus }) {
+  const config = statusConfig[status]
+  return (
+    <Badge variant="outline" className={`flex items-center gap-1.5 ${config?.badgeClass}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${config?.dotClass}`} />
+      {config?.label ?? status}
+    </Badge>
+  )
+}
 
 type Props = {
   orders: Orders
+  onCloseSheet: () => void
 }
 
-export function Read({ orders }: Props) {
+export function Read({ orders, onCloseSheet}: Props) {
   const formattedDate = useFormatDate(orders.date)
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="px-4 py-2 space-y-3">
-
-      {/* Cliente */}
       <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
         <div className="p-2 bg-amber-400 rounded-lg text-white">
           <User size={18} />
@@ -23,7 +42,6 @@ export function Read({ orders }: Props) {
         </div>
       </div>
 
-      {/* Produtos */}
       <div className="p-4 rounded-xl bg-amber-50 border border-amber-200">
         <div className="flex items-center gap-3 mb-3">
           <div className="p-2 bg-amber-400 rounded-lg text-white">
@@ -51,7 +69,6 @@ export function Read({ orders }: Props) {
         </div>
       </div>
 
-      {/* Data + Quantidade lado a lado */}
       <div className="grid grid-cols-2 gap-3">
         <div className="flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200">
           <div className="p-2 bg-amber-400 rounded-lg text-white">
@@ -69,12 +86,29 @@ export function Read({ orders }: Props) {
           </div>
           <div>
             <p className="text-xs text-amber-600 font-medium uppercase tracking-wide">Itens</p>
-            <p className="text-sm font-semibold text-gray-800">{orders.items.length} produto{orders.items.length !== 1 ? "s" : ""}</p>
+            <p className="text-sm font-semibold text-gray-800">
+              {orders.items.length} produto{orders.items.length !== 1 ? "s" : ""}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Total */}
+      <div className="flex items-center justify-between p-4 rounded-xl bg-amber-50 border border-amber-200">
+        <div>
+          <p className="text-xs text-amber-600 font-medium uppercase tracking-wide mb-1">Estado</p>
+          <OrderStatusBadge status={orders.status} />
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 text-amber-600 hover:text-amber-700 hover:bg-amber-100"
+          onClick={() => setOpen(true)}
+        >
+          <Pencil size={14} />
+          Alterar
+        </Button>
+      </div>
+
       <div className="flex items-center justify-between p-4 rounded-xl bg-amber-400 border border-amber-500">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-white/30 rounded-lg text-white">
@@ -87,6 +121,13 @@ export function Read({ orders }: Props) {
         </p>
       </div>
 
+      <StatusDialog
+        orderId={orders.id}
+        currentStatus={orders.status}
+        open={open}
+        onClose={() => setOpen(false)}
+        onSuccess={onCloseSheet}
+      />
     </div>
   )
 }

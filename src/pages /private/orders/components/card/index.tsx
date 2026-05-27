@@ -17,6 +17,7 @@ import React from 'react'
 import { OrdersSheetModal } from '../crud'
 import { usePagination } from '@/hooks/usePagination'
 import { PaginationControls } from '@/app/components/pagination'
+import { statusConfig } from '@/constants/statusConfig'
 
 interface Props {
   data: Orders[]
@@ -24,6 +25,7 @@ interface Props {
 
 function OrderCard({ orders, onAction }: { orders: Orders, onAction: (orders: Orders, action: ActionOptionView) => void }) {
   const formattedDate = useFormatDate(orders.date)
+  const config = statusConfig[orders.status]
 
   return (
     <Card className="hover:shadow-md transition-shadow">
@@ -64,12 +66,11 @@ function OrderCard({ orders, onAction }: { orders: Orders, onAction: (orders: Or
         </div>
 
         <div className="flex items-center justify-between">
-          <Badge className={
-            orders.status
-              ? 'bg-green-100 text-green-700 hover:bg-green-100'
-              : 'bg-red-100 text-red-700 hover:bg-red-100'
-          }>
-            {orders.status ? 'Concluído' : 'Pendente'}
+          <Badge
+            variant="secondary"
+            className={config?.badgeClass}
+          >
+            {config?.label ?? orders.status}
           </Badge>
         </div>
 

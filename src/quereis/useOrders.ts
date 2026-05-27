@@ -1,4 +1,4 @@
-import type { orderResponseTDO } from "@/schemas/orders"
+import type { orderResponseTDO, updateOrderDTO } from "@/schemas/orders"
 import { ordersService } from "@/service/orders"
 import { useCart } from "@/hooks/useCart"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
@@ -8,9 +8,12 @@ import { useNavigate } from "react-router-dom"
 import { useUserStore } from "@/stores/useUserStore"
 import type { GetParams } from "@/types/typesApi"
 
+
+const ORDERS_KEY = ['orders'] as const
+
 export const useGetAllOrders = (params?: GetParams) => {
   
-  const {user } = useUserStore((state) => state);
+   const {user } = useUserStore((state) => state);
 
     return useQuery({ 
     queryKey: ["orders", user?.id, params],
@@ -59,17 +62,22 @@ export const useCreateOrders = () => {
   })
 }
 
-// export const useDeleteOrder = () => {
-//   const queryClient = useQueryClient()
+export const useUpdateOrder = () => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationKey: ORDERS_KEY,
+    mutationFn: ({ id, data }: { id: string; data: updateOrderDTO}) =>
+    ordersService.update(id, data),
 
-//   return useMutation({
-//     mutationFn: (id: string) => ordersService.delete(id),
-//     onSuccess: () => {
-//       queryClient.invalidateQueries({ queryKey: ['orders'] })
-//       toast.success('Pedido removido!')
-//     },
-//     onError: () => {
-//       toast.error('Erro ao remover pedido!')
-//     },
-//   })
-// }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ORDERS_KEY})
+      toast.success("Estado actualizado!", {
+        action: { label: "Fechar", onClick: () => toast.dismiss() },
+      })
+    },
+
+    onError: () => {
+      toast.error("Erro ao actualizar o pedido!")
+    },
+  })
+}

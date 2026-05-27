@@ -1,7 +1,6 @@
-// import type { OrderStatus } from "@/constants/orders"
+import type { OrderStatus } from "@/constants/orders"
 
 export type Role    = 'Client' | 'Supplier' | 'Admin'
-
 export type StatuStocks = 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
 
 export interface Category {
@@ -93,7 +92,7 @@ export interface Orders {
   number:   number
   date:     string
   total:    number
-  status:   boolean
+  status:   OrderStatus
   clientId: string
   client:  Client
   items:    OrderItem[]

@@ -1,3 +1,4 @@
+import type { OrderStatus } from '@/constants/orders';
 import { StyleSheet } from '@react-pdf/renderer';
 
 export const brand = {
@@ -350,3 +351,43 @@ export const S = StyleSheet.create({
     color: brand.muted,
   },
 })
+
+
+export const statusConfig: Record<
+  OrderStatus,
+  {
+    bg: string
+    text: string
+    label: string
+  }
+> = {
+  Pendente: {
+    bg: brand.yellowBg,
+    text: brand.yellowText,
+    label: "Pendente",
+  },
+
+  Confirmado: {
+    bg: "#dbeafe",
+    text: "#1d4ed8",
+    label: "Confirmado",
+  },
+
+  Em_processamento: {
+    bg: "#f3e8ff",
+    text: "#7e22ce",
+    label: "Em processamento",
+  },
+
+  Enviado: {
+    bg: "#ffedd5",
+    text: "#ea580c",
+    label: "Enviado",
+  },
+
+  Entregue: {
+    bg: brand.greenBg,
+    text: brand.greenText,
+    label: "Entregue",
+  },
+}

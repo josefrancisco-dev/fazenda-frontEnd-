@@ -17,8 +17,19 @@ export const orderSchema = z.object({
 
 export type orderResponseTDO = z.infer<typeof orderSchema>
 
-export const updateOrderSchema = orderSchema.partial().extend({
-  id: z.string(),
-})
+export const orderStatusSchema = z.enum([
+  "Pendente",
+  "Confirmado",
+  "Em_processamento",
+  "Enviado",
+  "Entregue",
+])
+
+export const updateOrderSchema = orderSchema
+  .partial()
+  .extend({
+    id:     z.string().optional(),
+    status: orderStatusSchema.optional(),
+  })
 
 export type updateOrderDTO = z.infer<typeof updateOrderSchema>

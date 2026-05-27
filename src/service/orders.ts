@@ -1,5 +1,5 @@
 import { api } from "@/api";
-import type { orderResponseTDO } from "@/schemas/orders";
+import type { orderResponseTDO, updateOrderDTO } from "@/schemas/orders";
 import type {GetParams, Orders} from "@/types/typesApi";
 import type { AxiosResponse } from "axios";
 
@@ -24,8 +24,12 @@ async create(data: orderResponseTDO): Promise<AxiosResponse<Orders>> {
     return response 
   }
 
-update(id: string, data: orderResponseTDO): Promise<AxiosResponse<Orders>> {
+update(id: string, data: updateOrderDTO): Promise<AxiosResponse<Orders>> {
     return this.api.put<Orders>(`${this.route}/${id}`, data)
+  }
+
+patch(id: string, data: Partial<{ status: string }>): Promise<AxiosResponse<Orders>> {
+      return this.api.patch<Orders>(`${this.route}/${id}`, data)
   }
 }
 

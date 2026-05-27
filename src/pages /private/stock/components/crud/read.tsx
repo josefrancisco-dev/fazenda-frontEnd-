@@ -30,7 +30,7 @@ export function Read({ stock }: Props) {
           <div>
             <p className="text-xs text-amber-600 font-medium uppercase tracking-wide">Produto</p>
             <p className="text-sm font-semibold text-gray-800">{stock.product.name}</p>
-            <p className="text-xs text-gray-500">{stock.product.category}</p>
+            <p className="text-xs text-gray-500">{stock.product.category?.name}</p>
           </div>
         </div>
       )}

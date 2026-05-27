@@ -43,7 +43,7 @@ export function Read({ product }: Props) {
           </div>
           <div>
             <p className="text-xs text-amber-600 font-medium uppercase tracking-wide">Categoria</p>
-            <p className="text-sm font-semibold text-gray-800">{product.category}</p>
+            <p className="text-sm font-semibold text-gray-800">{product.category?.name}</p>
           </div>
         </div>
 
