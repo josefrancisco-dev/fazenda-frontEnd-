@@ -2,7 +2,6 @@
 import { useNavigate } from "react-router-dom"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import { useState } from "react"
 import { User, Mail, Phone, Lock, Eye, EyeOff, Building, ShieldHalf } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -11,17 +10,9 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Spinner } from "@/components/ui/spinner"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { useUserStore } from "@/stores/useUserStore"
+import { updateClientSchema, type updateClientTDO } from "@/schemas/client"
+import {useUpdateClientPartial } from "@/quereis/useClient"
 
-const profileSchema = z.object({
-  name:     z.string().min(1, "Nome obrigatório"),
-  email:    z.string().email("Email inválido"),
-  phone:    z.string().min(1, "Telefone obrigatório"),
-  company:  z.string().min(1, "Empresa obrigatória"),
-  nif:      z.string().min(1, "NIF obrigatório"),
-  password: z.string().optional(),
-})
-
-type ProfileTDO = z.infer<typeof profileSchema>
 
 export function ProfilePage() {
   const { user } = useUserStore()
@@ -29,21 +20,27 @@ export function ProfilePage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isPending] = useState(false)
 
-  const form = useForm<ProfileTDO>({
-    resolver: zodResolver(profileSchema),
+ const {mutateAsync} =  useUpdateClientPartial()
+
+  const form = useForm<updateClientTDO>({
+    resolver: zodResolver(updateClientSchema),
     defaultValues: {
-      name:     user?.name    ?? "",
-      email:    user?.email   ?? "",
-      phone:    user?.phone   ?? "",
-      company:  user?.company ?? "",
-      nif:      user?.nif     ?? "",
-      password: "",
+      name:     user?.name,
+      email:    user?.email,
+      phone:    user?.phone,
+      company:  user?.company,
+      nif:      user?.nif,
+      password: user?.password,
     }
   })
 
-  const onSubmit = (data: ProfileTDO) => {
-    console.log("Atualizar perfil:", data)
-    // chamar o service de update quando estiver pronto
+  const onSubmit = (data: updateClientTDO) => {
+  if (!user?.id) return
+   mutateAsync({ id :  user?.id, data})
+    .then(() => {
+      form.reset()
+    })
+    .catch((err) => console.log(err));
   }
 
   const initials = user?.name

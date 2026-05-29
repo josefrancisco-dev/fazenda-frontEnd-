@@ -68,12 +68,12 @@ export const useUpdateClientPartial = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationKey: CLIENT_KEY,
+    mutationKey: ['client'],
     mutationFn: async ({ id, data }: { id: string; data: updateClientTDO }) => {
       await clientService.patch(id, data)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: CLIENT_KEY })
+      queryClient.invalidateQueries({ queryKey: ['client']})
       toast.success('Cliente actualizado com sucesso!', {
         action: { label: 'Fechar', onClick: () => toast.dismiss() },
       })

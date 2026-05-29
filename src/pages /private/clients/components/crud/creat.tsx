@@ -42,8 +42,6 @@ export function SheetCreateClient() {
       form.reset()
     })
     .catch((err) => console.log(err));
-
-    console.log("enviar dados :  ", data)
   } 
 
   return (

@@ -8,11 +8,14 @@ import { orderStatusSchema } from "@/schemas/orders"
 import type z from "zod"
 import { StatusDialog } from "./update"
 import { statusConfig } from "@/constants/statusConfig"
+import { useUserStore } from "@/stores/useUserStore"
+import { PERMISSION } from "@/constants/constants"
 
 type OrderStatus = z.infer<typeof orderStatusSchema>
 
 function OrderStatusBadge({ status }: { status: OrderStatus }) {
   const config = statusConfig[status]
+
   return (
     <Badge variant="outline" className={`flex items-center gap-1.5 ${config?.badgeClass}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${config?.dotClass}`} />
@@ -29,6 +32,9 @@ type Props = {
 export function Read({ orders, onCloseSheet}: Props) {
   const formattedDate = useFormatDate(orders.date)
   const [open, setOpen] = useState(false)
+
+  const { user } = useUserStore();
+  const hasAdmin = user?.role == PERMISSION.Admin
 
   return (
     <div className="px-4 py-2 space-y-3">
@@ -98,6 +104,7 @@ export function Read({ orders, onCloseSheet}: Props) {
           <p className="text-xs text-amber-600 font-medium uppercase tracking-wide mb-1">Estado</p>
           <OrderStatusBadge status={orders.status} />
         </div>
+        {hasAdmin  && (
         <Button
           variant="ghost"
           size="sm"
@@ -107,8 +114,8 @@ export function Read({ orders, onCloseSheet}: Props) {
           <Pencil size={14} />
           Alterar
         </Button>
+        )}
       </div>
-
       <div className="flex items-center justify-between p-4 rounded-xl bg-amber-400 border border-amber-500">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-white/30 rounded-lg text-white">

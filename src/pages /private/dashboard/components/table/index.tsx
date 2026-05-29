@@ -14,55 +14,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useDashboardOverview } from "@/quereis/useDashboard"
 import { MoreHorizontalIcon, ShoppingCart, AlertCircle, Package, FileText } from "lucide-react"
 
-interface Activity {
-  id: string
-  icon: React.ReactNode
-  description: string
-  date: string
-}
-
-const activities: Activity[] = [
-  {
-    id: "1",
-    icon: <ShoppingCart size={16} className="text-blue-500" />,
-    description: "Novo pedido recebido de Supermercado Central",
-    date: "2024-03-17 14:32",
-  },
-  {
-    id: "2",
-    icon: <AlertCircle size={16} className="text-red-500" />,
-    description: "Estoque de Tomate Cherry abaixo do limite",
-    date: "2024-03-17 12:15",
-  },
-  {
-    id: "3",
-    icon: <Package size={16} className="text-yellow-600" />,
-    description: "Compra COM-000450 confirmada com fornecedor",
-    date: "2024-03-16 09:45",
-  },
-  {
-    id: "4",
-    icon: <ShoppingCart size={16} className="text-blue-500" />,
-    description: "Pedido PED-001244 entregue com sucesso",
-    date: "2024-03-16 16:20",
-  },
-  {
-    id: "5",
-    icon: <FileText size={16} className="text-slate-500" />,
-    description: "Relatório semanal gerado e salvo",
-    date: "2024-03-15 23:00",
-  },
-  {
-    id: "6",
-    icon: <AlertCircle size={16} className="text-red-500" />,
-    description: "Estoque de Mel atualizado: 85L",
-    date: "2024-03-15 10:30",
-  },
-]
-
 export function TableDashboard() {
+  const { data: overview, isLoading } = useDashboardOverview()
+
+  const getIcon = (tipo: string) => {
+    switch (tipo) {
+      case "pedido":  return <ShoppingCart size={16} className="text-blue-500"   />
+      case "compra":  return <Package      size={16} className="text-yellow-600" />
+      case "estoque": return <AlertCircle  size={16} className="text-red-500"    />
+      default:        return <FileText     size={16} className="text-slate-500"  />
+    }
+  }
+
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6">
       <h2 className="text-lg font-semibold text-slate-800 mb-4">Atividades Recentes</h2>
@@ -75,39 +41,60 @@ export function TableDashboard() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {activities.map((activity) => (
-            <TableRow key={activity.id}>
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
-                    {activity.icon}
-                  </div>
-                  <span className="text-sm text-slate-700">{activity.description}</span>
-                </div>
-              </TableCell>
-              <TableCell className="text-sm text-slate-400 whitespace-nowrap">
-                {activity.date}
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="size-8">
-                      <MoreHorizontalIcon />
-                      <span className="sr-only">Abrir menu</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
-                    <DropdownMenuItem>Marcar como lido</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem variant="destructive">
-                      Remover
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+          {isLoading
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="h-4 bg-slate-100 rounded animate-pulse w-64" />
+                  </TableCell>
+                  <TableCell>
+                    <div className="h-4 bg-slate-100 rounded animate-pulse w-32" />
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              ))
+            : overview?.atividades.length === 0
+            ? (
+                <TableRow>
+                  <TableCell colSpan={3} className="text-center text-sm text-slate-400 py-8">
+                    Nenhuma atividade recente
+                  </TableCell>
+                </TableRow>
+              )
+            : overview?.atividades.map((activity, i) => (
+                <TableRow key={i}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
+                        {getIcon(activity.tipo)}
+                      </div>
+                      <span className="text-sm text-slate-700">{activity.descricao}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-sm text-slate-400 whitespace-nowrap">
+                    {activity.data}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="size-8">
+                          <MoreHorizontalIcon />
+                          <span className="sr-only">Abrir menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
+                        <DropdownMenuItem>Marcar como lido</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem variant="destructive">
+                          Remover
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+          }
         </TableBody>
       </Table>
     </div>
