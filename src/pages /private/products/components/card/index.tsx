@@ -87,6 +87,7 @@ function ProductCard({ product, onAction }: { product: Product, onAction: (produ
             image: product.image,
             emoji: product.emoji,
             price: product.price,
+            quantity: product.quantity, 
           }} />
         </div>
         <div className="flex items-end justify-between">

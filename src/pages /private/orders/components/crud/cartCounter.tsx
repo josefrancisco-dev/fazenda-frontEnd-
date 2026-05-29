@@ -10,6 +10,7 @@ interface CartCounterProps {
     emoji: string
     image?: string 
     price: number
+    quantity?: number   
   }
 }
 
@@ -22,17 +23,17 @@ export function CartCounterCard({ product }: CartCounterProps) {
 
   if (!isClient) return null  
 
-  if (productQty === 0) {
-    return (
-      <Button
-        onClick={() => addItem(product)}
-        className="text-xs font-semibold text-white bg-yellow-500 hover:bg-yellow-600 rounded-full px-4 py-1 transition-colors"
-      >
-        + Adicionar
-      </Button>
-    )
-  }
-
+ if (productQty === 0) {
+  return (
+    <Button
+      onClick={() => addItem(product)}
+      disabled={product.quantity === 0}
+      className="text-xs font-semibold text-white bg-yellow-500 hover:bg-yellow-600 rounded-full px-4 py-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {product.quantity === 0 ? "Esgotado" : "+ Adicionar"} 
+    </Button>
+  )
+}
   return (
     <div className="flex items-center gap-1 bg-yellow-50 border border-yellow-400 rounded-full px-1 py-0.5">
       <button
@@ -56,7 +57,6 @@ export function CartCounterCard({ product }: CartCounterProps) {
   )
 }
 
-
 export function CartCounterRow({ product }: CartCounterProps) {
   const { items, addItem, removeItem } = useCart()
   const productQty = items.find((i) => i.id === product.id)?.quantity ?? 0
@@ -76,7 +76,8 @@ export function CartCounterRow({ product }: CartCounterProps) {
 
       <button
         onClick={() => addItem(product)}
-        className="px-2 py-1 text-slate-500 hover:bg-slate-100 transition-colors"
+        disabled={productQty >= (product.quantity ?? 0)} 
+        className="px-2 py-1 text-slate-500 hover:bg-slate-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
       >
         <Plus size={11} />
       </button>
