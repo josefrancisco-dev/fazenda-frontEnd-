@@ -13,6 +13,8 @@ export function TabsClients() {
     debouncedSearch ?  {q :  debouncedSearch} :  undefined
   )
 
+  console.log("Estoque : ", data)
+
   return (
    <Tabs defaultValue="Visualizar por Lista">
       {/* Botões de navegação */}

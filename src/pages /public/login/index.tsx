@@ -1,19 +1,18 @@
-import {Leaf } from 'lucide-react'
 import { LoginForm } from './components/loginForm'
 import { Link } from 'react-router-dom'
+import log from "@/assets/logo-girassol.png"
 
 export default function LoginPage() {
   return (
      <div className="w-full max-w-md space-y-8">
          {/* Mobile Logo */}
         <div className="md:hidden flex flex-col items-center gap-3 text-center">
-           <div className="p-3 rounded-lg bg-amber-500 text-primary-foreground">
-              <Leaf className="w-6 h-6 text-white" />
+           <div className="p-3 rounded-lgtext-primary-foreground">
+             <img 
+              src= {log}
+              className='w-auto h-16'
+              />
             </div>
-           <div>
-               <h1 className="text-3xl font-bold text-foreground">Girassol</h1>
-              <p className="text-sm text-muted-foreground">Gestão Agrícola</p>
-           </div>
            </div>
 
           <div className="space-y-2 text-center">
@@ -39,7 +38,7 @@ export default function LoginPage() {
 
            <p className="text-center text-sm text-muted-foreground">
             Não tem uma conta?{' '}
-            <Link to="/acount" className="font-semibold text-yellow-600 hover:underline">
+            <Link to="/acount" className="font-semibold text-[#d4e84a] hover:underline">
              Criar conta
             </Link>
           </p>

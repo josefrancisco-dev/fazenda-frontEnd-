@@ -1,34 +1,25 @@
-import { Leaf } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
 import loginBg from '@/assets/login.jpg'
-
+import log from '@/assets/logo-girassol.png'
 export default function Auth() {
   return (
     <main className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       <div className="hidden md:flex flex-col justify-between p-8 relative border-r border-slate-700 overflow-hidden">
 
-        {/* Imagem de fundo */}
         <img
           src={loginBg}
           alt="Campo agrícola"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
-        {/* Overlay escuro simples sem gradiente */}
         <div className="absolute inset-0 bg-black/40" />
 
-        {/* Logo */}
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-lg flex items-center justify-center font-bold text-white text-sm">
-            <Leaf className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">Girassol</h1>
-            <p className="text-sm text-yellow-100">Gestão Agrícola</p>
+          <div className="w-50 h-10">
+             <img src= {log}/>
           </div>
         </div>
 
-        {/* Hero + Features */}
         <div className="relative z-10 space-y-6">
           <div>
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -74,13 +65,11 @@ export default function Auth() {
           </div>
         </div>
 
-        {/* Footer */}
         <p className="relative z-10 text-xs text-white/50">
           © 2026 Girassol. Todos os direitos reservados.
         </p>
       </div>
 
-      {/* Right Side - Login Form */}
       <div className="flex flex-col justify-center items-center p-6 md:p-12 bg-background">
         <Outlet />
       </div>

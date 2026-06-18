@@ -1,7 +1,6 @@
 export const ActionOption = {
   VIEW: 'Visualizar',
   UPDATE: 'Editar',
-  DELETE:  "Eliminar"
 } as const
 
 export type ActionOption = (typeof ActionOption)[keyof typeof ActionOption]

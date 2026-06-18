@@ -2,7 +2,7 @@ import type { OrderStatus } from '@/constants/orders';
 import { StyleSheet } from '@react-pdf/renderer';
 
 export const brand = {
-  primary:    '#f59e0b', 
+  primary:    '#c5d93e', 
   dark:       '#1e293b', 
   darkMid:    '#334155', 
   light:      '#f8fafc', 

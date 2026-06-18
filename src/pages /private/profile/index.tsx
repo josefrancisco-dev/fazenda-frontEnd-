@@ -184,7 +184,7 @@ export function ProfilePage() {
           <Button type="submit" disabled={isPending} className="flex-1">
             {isPending ? <Spinner /> : "Salvar alterações"}
           </Button>
-          <Button type="button" className="bg-gray-500"  onClick={() => navigate(-1)}>
+          <Button type="button" className="bg-gray-200 hover:bg-gray-500"  onClick={() => navigate(-1)}>
             Voltar
           </Button>
         </div>

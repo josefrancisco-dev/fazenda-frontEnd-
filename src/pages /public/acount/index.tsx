@@ -1,18 +1,17 @@
-import {Leaf } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { SignUpForm } from './components/loginForm'
+import log from "@/assets/logo-girassol.png"
 
 export default function Acount() {
   return (
      <div className="w-full max-w-md space-y-8">
         <div className="md:hidden flex flex-col items-center gap-3 text-center">
-           <div className="p-3 rounded-lg bg-amber-500 text-primary-foreground">
-              <Leaf className="w-6 h-6 text-white" />
+           <div className="p-3 rounded-lg text-primary-foreground">
+              <img 
+              src= {log}
+              className='w-auto h-16'
+              />
             </div>
-           <div>
-               <h1 className="text-3xl font-bold text-foreground">Girassol</h1>
-              <p className="text-sm text-muted-foreground">Gestão Agrícola</p>
-           </div>
            </div>
 
           <div className="space-y-2 text-center">
@@ -37,7 +36,7 @@ export default function Acount() {
 
            <p className="text-center text-sm text-muted-foreground">
             Já possui  uma conta?{' '}
-            <Link to="/" className="font-semibold text-yellow-600 hover:underline">
+            <Link to="/" className="font-semibold text-[#d4e84a] hover:underline">
              Login
             </Link>
           </p>

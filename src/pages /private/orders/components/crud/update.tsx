@@ -80,12 +80,12 @@ export function StatusDialog({
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancelar</Button>
+            <Button variant="outline" className="cursor-pointer">Cancelar</Button>
           </DialogClose>
           <Button
             onClick={handleConfirm}
             disabled={isPending || selected === currentStatus}
-            className="bg-amber-400 hover:bg-amber-500 text-white"
+            className="text-white cursor-pointer"
           >
             {isPending ? "A guardar..." : "Confirmar"}
           </Button>

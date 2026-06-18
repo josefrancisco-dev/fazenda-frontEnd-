@@ -1,6 +1,6 @@
-
 import { formatDateTime } from '@/lib/data-utils';
-import { View, Text, StyleSheet } from '@react-pdf/renderer';
+import { View, Text, StyleSheet , Image as PdfImage} from '@react-pdf/renderer';
+import logo from '@/assets/logo-girassol.png';
  
 const styles = StyleSheet.create({
   header: {
@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 24,
     paddingBottom: 12,
-    borderBottom: '2px solid #f59e0b',
+    borderBottom: '2px solid #c5d93e',
   },
   brand: {
     flexDirection: 'row',
@@ -59,15 +59,15 @@ export const HeaderReport = () => {
  
   return (
     <View style={styles.header}>
-      {/* Logo + Nome */}
       <View style={styles.brand}>
-        <View style={styles.logoBox}>
-          <Text style={styles.logoText}>G</Text>
-        </View>
-        <View>
-          <Text style={styles.brandName}>Girassol</Text>
-          <Text style={styles.brandSub}>Sistema de Gestão</Text>
-        </View>
+        <div
+          className="relative z-10 flex items-center justify-center px-5 py-5"
+        >
+         <PdfImage
+          src={logo}
+          style={{ width: 80, height: 40, objectFit: 'contain' }}
+        />
+        </div>
       </View>
  
       {/* Data */}
