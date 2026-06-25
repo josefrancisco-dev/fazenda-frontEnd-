@@ -1,6 +1,6 @@
 import type { OrderStatus } from "@/constants/orders"
 
-export type Role    = 'Client' | 'Supplier' | 'Admin'
+export type Role    = 'Client' | 'Commercial_Manager' | 'Admin'
 export type StatuStocks = 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
 
 export interface Category {
@@ -22,7 +22,7 @@ export interface Client {
   role:  Role
   status: 'Customer' | 'Lead' | 'Active'
   date: string
-  company: string
+  isCorporative: string
   email: string
   phone: string
   nif:  string 

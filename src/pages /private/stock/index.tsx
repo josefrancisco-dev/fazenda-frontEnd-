@@ -28,7 +28,6 @@ export function Stock() {
         />
       </div>
 
-      {/* Activities */}
       <div className="">
         <TabsClients />
       </div>

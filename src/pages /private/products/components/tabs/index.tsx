@@ -14,6 +14,8 @@ export function TabsClients() {
   debouncedSearch ? { q: debouncedSearch } : undefined
   )
 
+  console.log("Produtos :", data)
+
   return (
    <Tabs defaultValue="Visualizar por Grade">
       {/* Botões de navegação */}

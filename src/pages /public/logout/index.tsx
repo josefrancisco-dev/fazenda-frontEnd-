@@ -1,6 +1,6 @@
 import { useLogoutMutation } from "@/quereis/useAuth";
 import { useUserStore } from "@/stores/useUserStore";
-import { Loader2, LogOut, MoreVertical, Settings } from "lucide-react";
+import { Loader2, LogOut, Settings } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

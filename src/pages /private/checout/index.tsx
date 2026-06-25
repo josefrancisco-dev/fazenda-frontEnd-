@@ -1,4 +1,3 @@
-// pages/Checkout.tsx
 import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'

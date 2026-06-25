@@ -1,7 +1,6 @@
 import { UI_THEME } from "@/constants/thme"
 import type { Client } from "@/types/typesApi"
 import {
-  Building,
   Mail,
   Phone,
   User,
@@ -65,9 +64,8 @@ export function Read({ client }: Props) {
 
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-
-        <div className={`flex items-center gap-3 p-4 ${UI_THEME.card}`}>
+      <div className="gap-3">
+        <div className={`flex items-center gap-3 p-4 w-full ${UI_THEME.card}`}>
           <div className={UI_THEME.icon}>
             <CreditCard size={16} />
           </div>
@@ -79,24 +77,9 @@ export function Read({ client }: Props) {
             </p>
           </div>
         </div>
-
-        <div className={`flex items-center gap-3 p-4 ${UI_THEME.card}`}>
-          <div className={UI_THEME.icon}>
-            <Building size={16} />
-          </div>
-
-          <div className="min-w-0">
-            <p className={UI_THEME.label}>Empresa</p>
-            <p className={`${UI_THEME.title} truncate`}>
-              {client.company}
-            </p>
-          </div>
-        </div>
-
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-
         <div className={`flex items-center gap-3 p-4 ${UI_THEME.card}`}>
           <div className={UI_THEME.icon}>
             <User size={16} />

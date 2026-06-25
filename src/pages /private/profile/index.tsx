@@ -28,7 +28,7 @@ export function ProfilePage() {
       name:     user?.name,
       email:    user?.email,
       phone:    user?.phone,
-      company:  user?.company,
+      isCorporative:  user?.isCorporative,
       nif:      user?.nif,
       password: user?.password,
     }
@@ -89,14 +89,14 @@ export function ProfilePage() {
         />
 
         <Controller
-          name="company"
+          name="isCorporative"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="company">Empresa</FieldLabel>
+              <FieldLabel htmlFor="isCorporative">Empresa</FieldLabel>
               <div className="relative">
                 <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-                <Input {...field} id="company" placeholder="Empresa" autoComplete="off" className="pl-10" />
+                <Input {...field} id="isCorporative" placeholder="Empresa" autoComplete="off" className="pl-10" />
               </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

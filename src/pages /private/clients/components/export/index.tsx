@@ -48,8 +48,8 @@ export function PrintStockDetails({ data:  clients }: Props) {
         <View style={S.table}>
 
           <View style={S.tableHeaderAccent}>
-            <Text style={[S.tableHeaderCell, { width: '22%' }]}>Empresa</Text>
-            <Text style={[S.tableHeaderCell, { width: '18%' }]}>Presentante</Text>
+            <Text style={[S.tableHeaderCell, { width: '22%' }]}>Nome</Text>
+            <Text style={[S.tableHeaderCell, { width: '18%' }]}>Tipo de usuário</Text>
             <Text style={[S.tableHeaderCell, { width: '15%' }]}>Telefone</Text>
             <Text style={[S.tableHeaderCell, { width: '15%' }]}>Emial</Text>
             <Text style={[S.tableHeaderCell, { width: '20%' }]}>Estado</Text>
@@ -58,11 +58,11 @@ export function PrintStockDetails({ data:  clients }: Props) {
 
           {clients.map((clients, index) => (
             <View key={clients.id} style={index % 2 === 0 ? S.tableRowEven : S.tableRowOdd}>
-              <Text style={[S.cellBold, { width: '22%' }]}>
-                {clients.company ?? 'N/A'}
-              </Text>
               <Text style={[S.cellMuted, { width: '18%' }]}>
-                {clients.name ?? 'N/A'}
+                {clients.name ?? 'N/A'} 
+              </Text>
+              <Text style={[S.cellBold, { width: '22%' }]}>
+                {clients.isCorporative ?? 'N/A'}
               </Text>
               <Text style={[S.cell, { width: '15%' }]}>
                 {clients.phone ?? 'N/A'} 

@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input"
 import {updateClientSchema,  type updateClientTDO } from "@/schemas/client"
-import {Controller, useForm } from "react-hook-form"
+import {Controller, useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import { toast } from "sonner"
 import { useUpdateClient} from "@/quereis/useClient"
+import { FileDropzone } from "@/app/components/dropzone"
 
 
 export function SheetUpdateClient({client, onClose} :  {client :  Client, onClose :  VoidFunction }) {
@@ -22,13 +23,16 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
         role:  client.role,
         status:  client.status,
         // date : "",
-        company:  client.company,
+        isCorporative:  client.isCorporative,
         email: client.email, 
         phone:  client.phone,
         nif: client.nif,
         password :  client.password
      }
   })
+
+  const isCorporativo = useWatch({ control: form.control, name: "isCorporative" }) === "Corporativo"
+  
 
   const onSubmit = (data : updateClientTDO) => {
     mutateAsync({id : client.id , data})
@@ -46,19 +50,19 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
   return (
     <div className="grid flex-1 auto-rows-min gap-6 px-4">
       <form className="space-y-4" id = "form-update"  onSubmit={form.handleSubmit(onSubmit)}>    
-        <Controller
-          name="company"
+          <Controller
+          name="name"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="company">
-                  Nome 
+              <FieldLabel htmlFor="name">
+                  Nome
               </FieldLabel>
               <Input
                 {...field}
-                id="company"
+                id="name"
                 aria-invalid={fieldState.invalid}
-                placeholder="Nome da empresa"
+                placeholder="Nome"
                 autoComplete="off"
               />
               {fieldState.invalid && (
@@ -68,7 +72,8 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
           )}
         />
 
-        <Controller
+        {isCorporativo && (
+          <Controller
           name="nif"
           control={form.control}
           render={({ field, fieldState }) => (
@@ -89,29 +94,8 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
             </Field>
           )}
         />
-
-        <Controller
-          name="name"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="name">
-                  Representante 
-              </FieldLabel>
-              <Input
-                {...field}
-                id="name"
-                aria-invalid={fieldState.invalid}
-                placeholder="Representante"
-                autoComplete="off"
-              />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
-        />
-
+        )}
+      
         <Controller
           name="phone"
           control={form.control}
@@ -220,7 +204,34 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
           )}
         />
 
-        {/* <Controller
+        <Controller
+          name="isCorporative"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="isCorporative">Tipo de utilizador</FieldLabel>
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+              >
+                <SelectTrigger
+                  id="categoryId"
+                  aria-invalid={fieldState.invalid}
+                >
+                  <SelectValue placeholder="Selecione o Tipo de utilizador" />
+                </SelectTrigger>
+
+                <SelectContent>
+                    <SelectItem value="Singula">Singular </SelectItem>
+                    <SelectItem value="Corporativo">Comporativo</SelectItem>
+                </SelectContent>
+              </Select>
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )} 
+          />
+
+         <Controller
           name="avatar"
           control={form.control}
           render={({ field: { onChange }, fieldState }) => (
@@ -232,7 +243,8 @@ export function SheetUpdateClient({client, onClose} :  {client :  Client, onClos
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
-        /> */}   
+        /> 
+        
       </form>  
          
       <Button

@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import { Eye, EyeOff, Mail, Lock, Building, Phone, User, ShieldHalf } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, Phone, User, ShieldHalf } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Field, FieldError, FieldLabel } from '@/components/ui/field'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { clientSchema, type clientSchemaTDO } from '@/schemas/client'
 import { useCreateClient } from '@/quereis/useClient'
 import { Spinner } from '@/components/ui/spinner'
 import { useNavigate } from 'react-router-dom'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false)
@@ -22,13 +23,15 @@ export function SignUpForm() {
       name: "",
       role: "Client",
       status: "Active",
-      company: "",
       email: "",
       phone: "",
       nif: "",
       password: "",
     }
   })
+
+  const isCorporativo = useWatch({ control: form.control, name: "isCorporative" }) === "Corporativo"
+  
 
   const onSubmit = (data: clientSchemaTDO) => {
     mutateAsync(data)
@@ -48,23 +51,24 @@ export function SignUpForm() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-
+      
       <Controller
-        name="company"
+        name="name"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="company">Entidade</FieldLabel>
+            <FieldLabel htmlFor="name">Nome</FieldLabel>
             <div className="relative">
-              <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-              <Input {...field} id="company" placeholder="Empresa" autoComplete="off" className="pl-10" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+              <Input {...field} id="name" placeholder="Nome" autoComplete="off" className="pl-10" />
             </div>
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />
-
-      <Controller
+      
+      {isCorporativo && (
+       <Controller
         name="nif"
         control={form.control}
         render={({ field, fieldState }) => (
@@ -78,21 +82,7 @@ export function SignUpForm() {
           </Field>
         )}
       />
-
-      <Controller
-        name="name"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="name">Nome</FieldLabel>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
-              <Input {...field} id="name" placeholder="Representante" autoComplete="off" className="pl-10" />
-            </div>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
+      )}
 
       <Controller
         name="phone"
@@ -123,6 +113,33 @@ export function SignUpForm() {
           </Field>
         )}
       />
+
+      <Controller
+        name="isCorporative"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="isCorporative">Tipo de utilizador</FieldLabel>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value}
+            >
+              <SelectTrigger
+                id="categoryId"
+                aria-invalid={fieldState.invalid}
+              >
+                <SelectValue placeholder="Selecione o Tipo de utilizador" />
+              </SelectTrigger>
+
+              <SelectContent>
+                  <SelectItem value="Singula">Singular </SelectItem>
+                  <SelectItem value="Corporativo">Comporativo</SelectItem>
+              </SelectContent>
+            </Select>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )} 
+        />  
 
       <Controller
         name="password"

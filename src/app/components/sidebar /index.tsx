@@ -117,10 +117,10 @@ const navItems: NavItem[] = [
   { path: '/dashboard',  label: 'Visão Geral',  icon: BarChart3,     allowed: ['Admin', 'Client'],   group: 'principal' },
   { path: '/clients',    label: 'Clientes',     icon: Users,          allowed: ['Admin'],              group: 'principal' },
   { path: '/categories', label: 'Categorias',   icon: ClipboardList, allowed: ['Admin'],              group: 'principal' },
-  { path: '/supplier',   label: 'Fornecedores', icon: Truck,         allowed: ['Admin', 'Supplier'],  group: 'principal' },
+  { path: '/supplier',   label: 'Fornecedores', icon: Truck,         allowed: ['Admin', 'Commercial_Manager'],  group: 'principal' },
   { path: '/products',   label: 'Produtos',     icon: Package,       allowed: ['Admin', 'Client'],    group: 'loja' },
   { path: '/orders',     label: 'Pedidos',      icon: ShoppingCart,  allowed: ['Admin', 'Client'],    group: 'loja' },
-  { path: '/shopping',   label: 'Compras',      icon: ShoppingBag,   allowed: ['Admin', 'Supplier'],  group: 'loja' },
+  { path: '/shopping',   label: 'Compras',      icon: ShoppingBag,   allowed: ['Admin', 'Commercial_Manager'],  group: 'loja' },
   { path: '/stock',      label: 'Estoque',      icon: Boxes,         allowed: ['Admin'],              group: 'loja' },
 ];
 

@@ -77,7 +77,7 @@ function ClientCard({ client, onAction }: { client: Client, onAction: (client: C
         <div className="space-y-2 pt-1 border-t border-slate-100">
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Building2 size={14} className="text-slate-400 shrink-0" />
-            <span>{client.company}</span>
+            <span>{client.name}</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <Mail size={14} className="text-slate-400 shrink-0" />

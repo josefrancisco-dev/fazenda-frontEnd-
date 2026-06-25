@@ -14,6 +14,8 @@ export function AppPrivate() {
   const token = tokenStorageServices.get();
   const { clearUser, setUser, user } = useUserStore((state) => state);
 
+  console.log("validade: ", userData )
+
   React.useEffect(() => {
     if (isSuccess && userData) {
       setUser(userData);

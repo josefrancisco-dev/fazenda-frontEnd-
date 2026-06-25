@@ -37,7 +37,10 @@ function TableStockRow({stock, onAction} : {stock :  Stock, onAction :  (onActio
               {stock.product?.category?.name}
             </TableCell>
             <TableCell className="text-slate-700">
-              {stock.quantity} {stock.product?.unit}
+              {stock.quantity} 
+            </TableCell>
+             <TableCell className="text-slate-700">
+             {stock.product?.unit}
             </TableCell>
             <TableCell className="text-slate-700">
               AO {stock.product?.price.toFixed(2).replace('.', ',')}
@@ -108,6 +111,7 @@ export function TableStock({data :  stock} : Props) {
           <TableRow>
             <TableHead>Produto</TableHead>
             <TableHead>Categoria</TableHead>
+            <TableHead>Itens</TableHead>
             <TableHead>Quantidade</TableHead>
             <TableHead>Preço Unit.</TableHead>
             <TableHead>Valor Total</TableHead>
@@ -127,7 +131,7 @@ export function TableStock({data :  stock} : Props) {
         ) :  (
         <TableRow>
           <TableCell colSpan={7} className="text-center py-8 text-slate-500">
-            Nenhum estoque encontrado
+            Nenhuma entrada de  Estoque encontrada
           </TableCell>
         </TableRow>
         )}

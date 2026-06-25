@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,15 +20,15 @@ import { useFormatDate } from "@/hooks/useFormatDate"
 import { ActionOptionView } from "@/types/enums"
 import { useSelected } from "@/hooks/useSelected"
 import React from "react"
-import { OrdersSheetModal } from "../crud"
 import { usePagination } from "@/hooks/usePagination"
 import { PaginationControls } from "@/app/components/pagination"
-import { statusConfig } from "@/constants/statusConfig"
+import { OrdersSheetModal } from "../crud/output"
 
 
 interface Props {
-  data: Orders[]
+  order: Orders[]
 }
+
 
 function TableOrderRow({
   orders,
@@ -39,24 +38,15 @@ function TableOrderRow({
   onAction: (orders: Orders, action: ActionOptionView) => void
 }) {
   const formattedDate = useFormatDate(orders.date)
-  const config = statusConfig[orders.status]
-
   const totalItens = orders.items.reduce((total , item) => {
     return total + item.quantity;
   }, 0)
 
   return (
     <TableRow key={orders.id}>
-      <TableCell className="font-medium">{orders.client?.name}</TableCell>
-      <TableCell>{totalItens} itens</TableCell>
-      <TableCell>
-        <Badge
-          variant="secondary"
-          className={config?.badgeClass}
-        >
-          {config?.label ?? orders.status}
-        </Badge>
-      </TableCell>
+      <TableCell className="font-medium">{orders.items[0].product?.name}</TableCell>
+      <TableCell>{orders.items[0].product.category?.name}</TableCell>
+      <TableCell>{totalItens}</TableCell>
       <TableCell>{formattedDate}</TableCell>
       <TableCell className="text-right">
         <DropdownMenu>
@@ -86,7 +76,7 @@ function TableOrderRow({
 }
 
 
-export function TableOrders({ data: orders }: Props) {
+export function TableStockOutput({ order: orders }: Props) {
   const { active, close, onSelected, selected } = useSelected<Orders>()
   const [action, setAction] = React.useState<ActionOptionView | null>(null)
 
@@ -120,10 +110,10 @@ export function TableOrders({ data: orders }: Props) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Cliente</TableHead>
+              <TableHead>Produto</TableHead>
+              <TableHead>Categoria</TableHead>
               <TableHead>Itens</TableHead>
-              <TableHead>Estado</TableHead>
-              <TableHead>Data de Solicitação</TableHead>
+              <TableHead>Data</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -143,7 +133,7 @@ export function TableOrders({ data: orders }: Props) {
                   colSpan={5}
                   className="text-center py-8 text-slate-500"
                 >
-                  Nenhum pedido encontrado
+                  Nenhuma de Estoque encontrada
                 </TableCell>
               </TableRow>
             )}

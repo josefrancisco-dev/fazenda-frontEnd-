@@ -1,9 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TableStock } from "../table"
-import { StockGrid } from "../card"
 import { useGetAllStock } from "@/quereis/useStock"
 import { useDebounce } from "@/hooks/useDeBounce"
 import { useSearchQuery } from "@/hooks/useSearchQuery"
+import { useGetAllOrders } from "@/quereis/useOrders"
+import { TableStockOutput } from "../table/index copy"
 
 export function TabsClients() {
   const {value} = useSearchQuery("q")
@@ -13,36 +14,36 @@ export function TabsClients() {
     debouncedSearch ?  {q :  debouncedSearch} :  undefined
   )
 
-  console.log("Estoque : ", data)
+  const {data :  orders} = useGetAllOrders(
+      debouncedSearch ? {q : debouncedSearch} :  undefined
+    )
 
   return (
-   <Tabs defaultValue="Visualizar por Lista">
-      {/* Botões de navegação */}
+   <Tabs defaultValue="Entrada">
       <TabsList variant="line">
         <TabsTrigger 
-         value="Visualizar por Lista"
+         value="Entrada"
          className="cursor-pointer"
         >
-        Visualizar por Lista
+        Entrada
         </TabsTrigger>
         <TabsTrigger
-         value="Visualizar por Grade"
+         value="Saída"
          className="cursor-pointer"
          >
-         Visualizar por Grade
+        Saída
         </TabsTrigger>
       </TabsList>
 
-      {/* Conteúdo de cada tab */}
-      <TabsContent value="Visualizar por Lista" className="mt-4 cursor-pointer">
+      <TabsContent value="Entrada" className="mt-4 cursor-pointer">
         <TableStock 
           data = {data ??  []}
         />
       </TabsContent>
 
-      <TabsContent value="Visualizar por Grade" className="mt-4 cursor-pointer">
-        <StockGrid
-         data = {data ??  []}
+      <TabsContent value="Saída" className="mt-4 cursor-pointer">
+        <TableStockOutput
+         order = {orders ?? []}
         />
       </TabsContent>
     </Tabs>

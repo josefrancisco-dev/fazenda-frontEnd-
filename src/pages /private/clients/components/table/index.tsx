@@ -38,6 +38,12 @@ const statusStyles: Record<Client['status'], string> = {
   Active:   'bg-blue-100 text-blue-700 hover:bg-blue-100',
 }
 
+const roleLabels: Record<Client['role'], string> = {
+  Client:   'Cliente',
+  Admin:    'Administrador',
+  Commercial_Manager: 'Gestor Comercial',
+}
+
 function getInitials(name: string) {
   return name.split(' ').map((n) => n[0]).join('').toUpperCase()
 }
@@ -55,15 +61,12 @@ function ClientTableRow({ client, onAction }: { client: Client, onAction: (clien
           </Avatar>
           <div>
             <p className="font-medium text-slate-800 text-sm">{client.name}</p>
-            <p className="text-xs text-slate-400">{client.role}</p>
+            <p className="text-xs text-slate-400">{roleLabels[client.role]}</p>
           </div>
         </div>
       </TableCell>
       <TableCell className="text-slate-600 text-sm">
-        {client.company}
-      </TableCell>
-      <TableCell className="text-slate-600 text-sm">
-        {client.nif}
+       {client.nif || "N/A"}
       </TableCell>
       <TableCell className="text-slate-500 text-sm">
         {client.email}
@@ -140,8 +143,7 @@ export function TableClients({ data: client }: Props) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Representante</TableHead>
-            <TableHead>Empresa</TableHead>
+            <TableHead>Nome</TableHead>
             <TableHead>NIF</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Telefone</TableHead>
