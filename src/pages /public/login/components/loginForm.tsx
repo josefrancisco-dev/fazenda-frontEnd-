@@ -70,7 +70,9 @@ export function LoginForm() {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2"
           >
-            {showPassword ? <EyeOff /> : <Eye />}
+            {showPassword ? 
+            <EyeOff className='text-[#173e28]' /> : 
+            <Eye className='text-[#173e28]'/>}
           </button>
         </div>
       </div>

@@ -163,8 +163,8 @@ export function SignUpForm() {
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 {showPassword
-                  ? <EyeOff className="w-5 h-5 text-[#d4e84a]" />
-                  : <Eye className="w-5 h-5 text-[#d4e84a]" />
+                  ? <EyeOff className="w-5 h-5 text-[#173e28]" />
+                  : <Eye className="w-5 h-5 text-[#173e28]" />
                 }
               </button>
             </div>

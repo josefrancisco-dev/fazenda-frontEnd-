@@ -35,10 +35,9 @@ export default function LoginPage() {
             </div>
           </div>
 
-
            <p className="text-center text-sm text-muted-foreground">
             Não tem uma conta?{' '}
-            <Link to="/acount" className="font-semibold text-[#d4e84a] hover:underline">
+            <Link to="/acount" className="font-semibold text-[#173e28] hover:underline">
              Criar conta
             </Link>
           </p>

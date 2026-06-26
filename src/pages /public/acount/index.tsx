@@ -36,7 +36,7 @@ export default function Acount() {
 
            <p className="text-center text-sm text-muted-foreground">
             Já possui  uma conta?{' '}
-            <Link to="/" className="font-semibold text-[#d4e84a] hover:underline">
+            <Link to="/" className="font-semibold text-[#173e28] hover:underline">
              Login
             </Link>
           </p>
