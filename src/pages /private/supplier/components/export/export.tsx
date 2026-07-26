@@ -19,6 +19,9 @@ import { ExportTypes, type ExportType } from "@/types/enums";
 import {useSuppliersPrint } from "@/quereis/export";
 import { pdfName } from "@/helpers/string.helpers";
 import { Spinner } from "@/components/ui/spinner";
+import { useSearchParams } from "react-router-dom";
+import type { ClientStatus } from "@/types/typesApi";
+import {parse, parseISO } from "date-fns";
 
 async function generatePDF(
   component: React.ReactElement<DocumentProps>,
@@ -31,7 +34,32 @@ async function generatePDF(
 export function ExportDropdownSuppliers() {
   const [isOpenExportPDF, setOpenExportPdf] = React.useState(false);
 
-  const { data} = useSuppliersPrint();
+  const [searchParams] = useSearchParams();
+  
+    const q = searchParams.get("q") ?? undefined;
+    const status = (searchParams.get("status") ?? undefined) as ClientStatus | undefined;
+    const phone = searchParams.get("phone") ?? undefined;
+    const nif = searchParams.get("nif") ?? undefined;
+    const from = searchParams.get("from") ?? undefined;
+    const to = searchParams.get("to") ?? undefined;
+
+    const { data} = useSuppliersPrint({ q, status, nif, phone, from, to });
+  
+    const filteredData = React.useMemo(() => {
+      if (!data) return [];
+      if (!from && !to) return data;
+  
+      const fromDate = from ? parseISO(from) : undefined;
+      const toDate = to ? parseISO(to) : undefined;
+  
+      return data.filter((client) => {
+        const clientDate = parse(client.date, "dd/MM/yyyy", new Date());
+        if (fromDate && clientDate < fromDate) return false;
+        if (toDate && clientDate > toDate) return false;
+        return true;
+      });
+    }, [data, from, to]);
+
 
 const handleExport = async (type: ExportType) => {
   if (type === ExportTypes.PDF) {
@@ -39,7 +67,7 @@ const handleExport = async (type: ExportType) => {
       setOpenExportPdf(true);
 
       await generatePDF(
-        <PrintStockDetails data={data ?? []} />,
+        <PrintStockDetails data={filteredData ?? []} />,
         pdfName("Fornecedor")
       );
 

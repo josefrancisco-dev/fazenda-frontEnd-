@@ -20,12 +20,7 @@ export function Supplier() {
       </div>
 
       <div >
-        <FilterBar
-          searchPlaceholder="Pesquisar produtos..."
-          onSearch={(value) => console.log(value)}
-          onFilter={() => console.log('abrir filtros')}
-          onExport={() => console.log('exportar')}
-        />
+        <FilterBar />
       </div>
 
       {/* Activities */}

@@ -1,36 +1,3 @@
-// import {  Filter} from 'lucide-react'
-// import { Button } from '@/components/ui/button'
-// import { ExportDropdownClients } from '../export/export'
-// import { SearchComponent } from '@/app/components/search'
-
-// interface FilterBarProps {
-//   searchPlaceholder?: string
-//   onSearch?: (value: string) => void
-//   onFilter?: () => void
-//   onExport?: () => void
-// }
-
-// export function FilterBar({
-//   onFilter,
-// }: FilterBarProps) {
-//   return (
-//     <div className="flex items-center justify-between gap-3 w-full">
-//       {/* Search */}
-//        <SearchComponent/>
-
-//       <div className='space-x-2'>
-//         <Button variant="outline" onClick={onFilter} className="gap-2">
-//             <Filter size={16} />
-//             Filtrar
-//         </Button>
-
-//       <ExportDropdownClients/>
-//       </div>
-//     </div>
-//   )
-// }
-
-
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Filter, X } from "lucide-react";
@@ -199,27 +166,6 @@ export function FilterBar({ statusOptions = DEFAULT_STATUS_OPTIONS }: FilterBarP
                 onChange={handleDateSelect}
               /> 
 
-              {/* <TextFilter
-                label="Telefone"
-                placeholder="Pesquisar por telefone..."
-                value={phoneValue}
-                onChange={setPhoneValue}
-              />
-
-              <TextFilter
-                label="NIF"
-                placeholder="Pesquisar por NIF..."
-                value={nifValue}
-                onChange={setNifValue}
-              />
-
-              <DateFilter
-                label="Data de criação"
-                value={dateRange}
-                onChange={handleDateSelect}
-              /> 
-              
-              */}
 
               {activeCount > 0 && (
                 <Button

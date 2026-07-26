@@ -9,8 +9,8 @@ class PrintService {
       return response.data
     }
 
-    async getSupplierPrint(): Promise<Supplier[]> {
-      const response = await api.get<Supplier[]>("/suppliers/print")
+    async getSupplierPrint(params?: GetParams): Promise<Supplier[]> {
+      const response = await api.get<Supplier[]>("/suppliers/print", {params})
       return response.data
     }
 
