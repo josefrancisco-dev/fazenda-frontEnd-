@@ -1,6 +1,7 @@
 
 import { api } from "@/api"
 import type { Client, Orders, Product, Shopping, Stock, Supplier } from "@/types/typesApi"
+import type { GetParams } from "@/types/typesApi"
 
 class PrintService {
     async getStockPrint(): Promise<Stock[]> {
@@ -23,8 +24,8 @@ class PrintService {
       return response.data
     }
 
-      async getOrdersPrint(): Promise<Orders[]> {
-      const response = await api.get<Orders[]>("/orders/print")
+    async getOrdersPrint(params?: GetParams): Promise<Orders[]> {
+      const response = await api.get<Orders[]>("/orders/print", { params })
       return response.data
     }
 

@@ -21,7 +21,7 @@ function CategoryCard({category, onAction} : {category :  Category, onAction :  
       <CardContent className="p-5 space-y-4">
         <div className='flex justify-between'>
           <div>
-            <h3 className="font-semibold text-slate-800">{category.id}</h3>
+            {/* <h3 className="font-semibold text-slate-800">{category.id}</h3> */}
             <p className="text-sm text-slate-400">{category.name}</p>
           </div>
             <DropdownMenu>

@@ -9,7 +9,6 @@ export const metadata = {
 export function Orders() {
   return (
     <div className="p-4 md:p-8 space-y-8">
-      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Pedidos</h1>
@@ -17,15 +16,9 @@ export function Orders() {
       </div>
 
       <div >
-        <FilterBar
-          searchPlaceholder="Pesquisar produtos..."
-          onSearch={(value) => console.log(value)}
-          onFilter={() => console.log('abrir filtros')}
-          onExport={() => console.log('exportar')}
-        />
+        <FilterBar/>
       </div>
 
-      {/* Activities */}
       <div className="">
         <TabsClients />
       </div>

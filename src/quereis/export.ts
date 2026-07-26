@@ -1,6 +1,6 @@
 import { printService } from "@/service/export";
 import { useQuery } from "@tanstack/react-query";
-
+import type { GetParams } from "@/types/typesApi"
 
   export const useStockPrint  = () => {
      return useQuery ({
@@ -43,15 +43,15 @@ import { useQuery } from "@tanstack/react-query";
      }) 
   }
 
-   export const useOrdersPrint  = () => {
-     return useQuery ({
-       queryKey:  ['print-orders'],
-       queryFn :  async () => {
-          const response = await printService.getOrdersPrint()
-          return response
-       },
-     }) 
-  }
+      export const useOrdersPrint  = (params?: GetParams) => {
+         return useQuery ({
+            queryKey:  ['print-orders', params],
+            queryFn :  async () => {
+               const response = await printService.getOrdersPrint(params)
+               return response
+            },
+         }) 
+      }
 
    export const useShoppingPrint  = () => {
      return useQuery ({

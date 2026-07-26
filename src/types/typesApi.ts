@@ -114,4 +114,7 @@ export type AuthToken = {
 
 export interface GetParams {
   q?: string; 
+  status?: OrderStatus;
+  from?: string;
+  to?: string;
 }

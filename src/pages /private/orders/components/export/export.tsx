@@ -19,6 +19,8 @@ import { ExportTypes, type ExportType } from "@/types/enums";
 import {useOrdersPrint} from "@/quereis/export";
 import { pdfName } from "@/helpers/string.helpers";
 import { Spinner } from "@/components/ui/spinner";
+import { useSearchParams } from "react-router-dom";
+import type { OrderStatus } from "@/constants/orders";
 
 async function generatePDF(
   component: React.ReactElement<DocumentProps>,
@@ -31,9 +33,13 @@ async function generatePDF(
 export function ExportDropdownOrders() {
   const [isOpenExportPDF, setOpenExportPdf] = React.useState(false);
 
-  const { data} = useOrdersPrint();
+  const [searchParams] = useSearchParams();
+  const q = searchParams.get("q") ?? undefined;
+  const status = (searchParams.get("status") ?? undefined) as OrderStatus | undefined;
+  const from = searchParams.get("from") ?? undefined;
+  const to = searchParams.get("to") ?? undefined;
 
-  console
+  const { data } = useOrdersPrint({ q, status, from, to });
 
 const handleExport = async (type: ExportType) => {
   if (type === ExportTypes.PDF) {
