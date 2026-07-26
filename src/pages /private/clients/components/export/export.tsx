@@ -8,17 +8,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Download, FileText} from "lucide-react";
+import { Download, FileText } from "lucide-react";
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { pdf } from "@react-pdf/renderer";
 import type { DocumentProps } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
+import { parse, parseISO } from "date-fns";
 import { PrintStockDetails } from ".";
 import { ExportTypes, type ExportType } from "@/types/enums";
-import {useClientsPrint} from "@/quereis/export";
+import { useClientsPrint } from "@/quereis/export";
 import { pdfName } from "@/helpers/string.helpers";
 import { Spinner } from "@/components/ui/spinner";
+import type { ClientStatus } from "@/types/typesApi";
 
 async function generatePDF(
   component: React.ReactElement<DocumentProps>,
@@ -31,27 +34,51 @@ async function generatePDF(
 export function ExportDropdownClients() {
   const [isOpenExportPDF, setOpenExportPdf] = React.useState(false);
 
-  const { data} = useClientsPrint();
+  const [searchParams] = useSearchParams();
 
-const handleExport = async (type: ExportType) => {
-  if (type === ExportTypes.PDF) {
-    try {
-      setOpenExportPdf(true);
+  const q = searchParams.get("q") ?? undefined;
+  const status = (searchParams.get("status") ?? undefined) as ClientStatus | undefined;
+  const phone = searchParams.get("phone") ?? undefined;
+  const nif = searchParams.get("nif") ?? undefined;
+  const from = searchParams.get("from") ?? undefined;
+  const to = searchParams.get("to") ?? undefined;
 
-      await generatePDF(
-        <PrintStockDetails data={data ?? []} />,
-        pdfName("Clientes")
-      );
+  const { data } = useClientsPrint({ q, status, nif, phone, from, to });
 
-      toast.success("PDF exportado com sucesso!");
-    } catch (error) {
-      console.error("Erro ao exportar PDF:", error);
-      toast.error("Erro ao exportar PDF");
-    } finally {
-      setOpenExportPdf(false);
+  const filteredData = React.useMemo(() => {
+    if (!data) return [];
+    if (!from && !to) return data;
+
+    const fromDate = from ? parseISO(from) : undefined;
+    const toDate = to ? parseISO(to) : undefined;
+
+    return data.filter((client) => {
+      const clientDate = parse(client.date, "dd/MM/yyyy", new Date());
+      if (fromDate && clientDate < fromDate) return false;
+      if (toDate && clientDate > toDate) return false;
+      return true;
+    });
+  }, [data, from, to]);
+
+  const handleExport = async (type: ExportType) => {
+    if (type === ExportTypes.PDF) {
+      try {
+        setOpenExportPdf(true);
+
+        await generatePDF(
+          <PrintStockDetails data={filteredData} />,
+          pdfName("Clientes")
+        );
+
+        toast.success("PDF exportado com sucesso!");
+      } catch (error) {
+        console.error("Erro ao exportar PDF:", error);
+        toast.error("Erro ao exportar PDF");
+      } finally {
+        setOpenExportPdf(false);
+      }
     }
-  }
-};
+  };
 
   return (
     <>
@@ -72,7 +99,7 @@ const handleExport = async (type: ExportType) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem   disabled={isOpenExportPDF} onClick={() => handleExport(ExportTypes.PDF)}>
+            <DropdownMenuItem disabled={isOpenExportPDF} onClick={() => handleExport(ExportTypes.PDF)}>
               <FileText className="mr-2 h-4 w-4 text-red-500" />
               <div className="flex flex-col">
                 <span>Exportar como PDF</span>

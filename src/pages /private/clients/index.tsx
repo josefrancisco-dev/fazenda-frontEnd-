@@ -20,12 +20,7 @@ export function Clients() {
       </div>
 
       <div >
-        <FilterBar
-          searchPlaceholder="Pesquisar cliente..."
-          onSearch={(value) => console.log(value)}
-          onFilter={() => console.log('abrir filtros')}
-          onExport={() => console.log('exportar')}
-        />
+        <FilterBar/>
       </div>
 
       {/* Activities */}

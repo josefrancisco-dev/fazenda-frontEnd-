@@ -14,8 +14,8 @@ class PrintService {
       return response.data
     }
 
-    async getClientsPrint(): Promise<Client[]> {
-      const response = await api.get<Client[]>("/clients/print")
+    async getClientsPrint(params?: GetParams): Promise<Client[]> {
+      const response = await api.get<Client[]>("/clients/print", { params })
       return response.data
     }
 

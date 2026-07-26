@@ -23,11 +23,11 @@ import type { GetParams } from "@/types/typesApi"
      }) 
   }
 
-  export const useClientsPrint  = () => {
+  export const useClientsPrint  = (params?: GetParams) => {
      return useQuery ({
        queryKey:  ['print-clients'],
        queryFn :  async () => {
-          const response = await printService.getClientsPrint()
+          const response = await printService.getClientsPrint(params)
           return response
        },
      }) 

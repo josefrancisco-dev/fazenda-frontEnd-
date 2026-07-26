@@ -2,6 +2,7 @@ import type { OrderStatus } from "@/constants/orders"
 
 export type Role    = 'Client' | 'Commercial_Manager' | 'Admin'
 export type StatuStocks = 'Em Estoque' | 'Estoque Médio' | 'Estoque Baixo'
+export type ClientStatus = 'Customer' | 'Lead' | 'Active'
 
 export interface Category {
   id: string
@@ -114,7 +115,9 @@ export type AuthToken = {
 
 export interface GetParams {
   q?: string; 
-  status?: OrderStatus;
+  status?: OrderStatus | ClientStatus;
   from?: string;
   to?: string;
+  nif?:string;
+  phone?:string;
 }
