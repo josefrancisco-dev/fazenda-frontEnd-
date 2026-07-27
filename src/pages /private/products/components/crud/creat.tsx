@@ -135,15 +135,25 @@ export function SheetCreateProduct() {
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
                     <FieldLabel htmlFor="unit">
-                      Unidade  
+                      Unidade
                     </FieldLabel>
-                    <Input
-                      {...field}
-                      id="unit"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="unit"
-                      autoComplete="off"
-                    />
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value}
+                    >
+                      <SelectTrigger
+                        id="unit"
+                        aria-invalid={fieldState.invalid}
+                      >
+                        <SelectValue placeholder="Selecione a unidade" />
+                      </SelectTrigger>
+                      <SelectContent>
+                          <SelectItem value="kg">kg</SelectItem>
+                          <SelectItem value="g">g</SelectItem>
+                          <SelectItem value="l">l</SelectItem>
+                          <SelectItem value="dz">dz</SelectItem>
+                        </SelectContent>
+                    </Select>
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
                     )}
