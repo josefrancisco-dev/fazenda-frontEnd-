@@ -30,8 +30,6 @@ export function SheetCreateProduct() {
     resolver : zodResolver(productSchema),
      defaultValues :  {
         name:   "",
-        banner:  "",
-        emoji:   "",
      }
   })
 
@@ -184,50 +182,6 @@ export function SheetCreateProduct() {
                   )}
                 />
 
-
-            <Controller
-              name="emoji"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="emoji">
-                     Emoji 
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="emoji"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Emoji"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-
-            <Controller
-                name="banner"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="banner">
-                      Banner 
-                    </FieldLabel>
-                    <Input
-                      {...field}
-                      id="banner"
-                      aria-invalid={fieldState.invalid}
-                      placeholder="Banner"
-                      autoComplete="off"
-                    />
-                    {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
-                    )}
-                  </Field>
-                )}
-              />
 
               <Controller
                 name="image"

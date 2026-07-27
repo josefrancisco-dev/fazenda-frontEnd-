@@ -41,8 +41,6 @@ class ProductService {
     formData.append("categoryId", data.categoryId)
     formData.append("unit", data.unit)
     formData.append("price",    String(data.price))
-    formData.append("banner",   data.banner)
-    formData.append("emoji",    data.emoji)
     if (data.image) formData.append("image", data.image) 
 
     return this.api.post<Product>(this.route, formData, {
@@ -56,8 +54,6 @@ class ProductService {
     if (data.categoryId) formData.append("categoryId", data.categoryId)
     if (data.unit) formData.append("unit", data.unit)
     if (data.price)    formData.append("price",    String(data.price))
-    if (data.banner)   formData.append("banner",   data.banner)
-    if (data.emoji)    formData.append("emoji",    data.emoji)
     if (data.image)    formData.append("image",    data.image)
 
     return this.api.put<Product>(`${this.route}/${id}`, formData, {

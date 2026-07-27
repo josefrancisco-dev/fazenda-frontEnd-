@@ -175,8 +175,6 @@ export function SheetUpdateProduct({product, onClose} :  {product :  Product, on
               />
 
           <Button
-          //  type="submit" 
-          //  form = "form-rhf-demo"
           className="w-full"
            >
              {isPending ? <Spinner />: "Cadastrar" }
